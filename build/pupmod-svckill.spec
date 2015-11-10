@@ -1,7 +1,7 @@
 Summary: Svckill Puppet Module
 Name: pupmod-svckill
 Version: 1.0.0
-Release: 4
+Release: 5
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -56,6 +56,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Tue Nov 10 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 1.0.0-5
+- migration to simplib and simpcat (lib/ only)
+
 * Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-4
 - Changed puppet-server requirement to puppet
 
