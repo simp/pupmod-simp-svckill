@@ -15,5 +15,5 @@
 define svckill::ignore {
   include 'svckill'
 
-  concat_fragment { "svckill_ignore+$name.ignore": content => "$name\n" }
+  concat_fragment { "svckill_ignore+${name}.ignore": content => "${name}\n" }
 }

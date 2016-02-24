@@ -60,6 +60,10 @@ class svckill (
   $ignore = [],
   $ignore_files = []
 ){
+  validate_array($ignore)
+  validate_array($ignore_files)
+  if !empty($ignore_files) { validate_re_array($ignore_files,'^/') }
+
   $default_ignore = '/usr/local/etc/svckill.ignore'
 
   concat_build { 'svckill_ignore':
@@ -73,8 +77,4 @@ class svckill (
     ignore      => $ignore,
     ignorefiles => flatten([$ignore_files,$default_ignore])
   }
-
-  validate_array($ignore)
-  validate_array($ignore_files)
-  if !empty($ignore_files) { validate_re_array($ignore_files,'^/') }
 }
