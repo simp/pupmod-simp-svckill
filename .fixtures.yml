@@ -1,7 +1,6 @@
 ---
 fixtures:
   repositories:
-    common: "git://github.com/simp/pupmod-simp-common"
     simplib: "git://github.com/simp/pupmod-simp-simplib"
     simpcat: "git://github.com/simp/pupmod-simp-concat"
     stdlib: "git://github.com/simp/puppetlabs-stdlib"
