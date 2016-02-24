@@ -1,0 +1,37 @@
+{
+  "name":    "simp-svckill",
+  "version": "1.0.0",
+  "author":  "simp",
+  "summary": "Disables all services that are not controlled by Puppet.
+  "license": "Apache-2.0",
+  "source":  "https://github.com/simp/pupmod-simp-svckill",
+  "project_page": "https://github.com/simp/pupmod-simp-svckill",
+  "issues_url":   "https://simp-project.atlassian.net",
+  "tags": [ "simp", "svckill" ],
+  "dependencies": [
+    {
+      "name": "simp-simpcat",
+      "version_requirement": ">= 4.1.0"
+    }
+    {
+      "name": "simp-simplib",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ]
+}
