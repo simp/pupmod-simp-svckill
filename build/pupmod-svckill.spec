@@ -1,7 +1,7 @@
 Summary: Svckill Puppet Module
 Name: pupmod-svckill
-Version: 1.0.0
-Release: 6
+Version: 1.1.0
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -9,10 +9,10 @@ Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: puppet >= 3.3.0
 Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
-Obsoletes: pupmod-timezone
-Obsoletes: pupmod-svckill-test
+Obsoletes: pupmod-timezone >= 0.0.1
+Obsoletes: pupmod-svckill-test >= 0.0.1
 
-Prefix: /etc/puppet/environments/simp/modules
+Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
 %description
 This Puppet module provides the capability to disable all services on
@@ -48,14 +48,16 @@ mkdir -p %{buildroot}/%{prefix}/svckill
 %post
 #!/bin/sh
 
-if [ -d /etc/puppet/environments/simp/modules/svckill/plugins ]; then
-  /bin/mv /etc/puppet/environments/simp/modules/svckill/plugins /etc/puppet/environments/simp/modules/common/plugins.bak
-fi
-
 %postun
 # Post uninstall stuff
 
 %changelog
+* Thu Mar 10 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
+- Added a 'verbose' option to svckill which will enumerate all actions on
+  services if enabled.
+- Ensure that all relevant messages are passed back via the 'to_s' method so
+  that PuppetDB can obtain a full report.
+
 * Wed Feb 24 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.0-6
 - Minor linting fixes
 

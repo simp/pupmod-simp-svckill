@@ -212,6 +212,17 @@ Puppet::Type.type(:svckill).provide(:kill) do
   end
 
   def mode=(should)
+    @results = {
+      :stopped => {
+        :passed => [],
+        :failed => []
+      },
+      :disabled => {
+        :passed => [],
+        :failed => []
+      }
+    }
+
     @running_services.each_key do |svc|
       Puppet.debug("svckill: Attempting to stop service '#{svc}'")
 
@@ -219,9 +230,9 @@ Puppet::Type.type(:svckill).provide(:kill) do
         begin
           @running_services[svc][:provider].send 'stop'
         rescue Puppet::Error => e
-          Puppet.err("svckill: Failed to stop service '#{svc}'")
+          @results[:stopped][:failed] << svc
         else
-          Puppet.notice("svckill: Stopped service '#{svc}'")
+          @results[:stopped][:passed] << svc
         end
       end
 
@@ -229,11 +240,15 @@ Puppet::Type.type(:svckill).provide(:kill) do
         begin
           @running_services[svc][:provider].send 'disable'
         rescue Puppet::Error => e
-          Puppet.err("svckill: Failed to disable service '#{svc}'")
+          @results[:disabled][:failed] << svc
         else
-          Puppet.notice("svckill: Disabled service '#{svc}'")
+          @results[:disabled][:passed] << svc
         end
       end
     end
+  end
+
+  def results
+    return @results
   end
 end

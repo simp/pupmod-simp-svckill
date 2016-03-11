@@ -58,7 +58,8 @@
 #
 class svckill (
   $ignore = [],
-  $ignore_files = []
+  $ignore_files = [],
+  $verbose = true
 ){
   validate_array($ignore)
   validate_array($ignore_files)
@@ -75,6 +76,7 @@ class svckill (
 
   svckill { 'svckill':
     ignore      => $ignore,
-    ignorefiles => flatten([$ignore_files,$default_ignore])
+    ignorefiles => flatten([$ignore_files,$default_ignore]),
+    verbose     => $verbose
   }
 }

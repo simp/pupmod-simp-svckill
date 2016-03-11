@@ -8,7 +8,7 @@ describe 'Kill Unmanaged Services' do
       it 'should not kill the network' do
         result = apply_manifest_on(host,'include "svckill"', :catch_failures => true).stdout
 
-        expect(result).to_not match(/Stopped.*'network/)
+        expect(result).to_not match(/stopped.*'network/)
       end
 
       it 'should kill Dnsmasq unless declared in a manifest' do
@@ -16,7 +16,7 @@ describe 'Kill Unmanaged Services' do
         on(host, 'puppet resource service dnsmasq ensure=running')
         result = apply_manifest_on(host, 'include "svckill"', :catch_failures => true).stdout
 
-        expect(result).to match(/Stopped.*'dnsmasq/)
+        expect(result).to match(/stopped.*'dnsmasq/)
       end
 
       it 'should not kill Dnsmasq if declared in a manifest' do
@@ -29,7 +29,7 @@ describe 'Kill Unmanaged Services' do
 
         result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
 
-        expect(result).to_not match(/Stopped.*'dnsmasq/)
+        expect(result).to_not match(/stopped.*'dnsmasq/)
       end
     end
 
@@ -46,7 +46,7 @@ describe 'Kill Unmanaged Services' do
         on(host, 'puppet resource service dnsmasq ensure=running')
         result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
 
-        expect(result).to_not match(/Stopped.*'dnsmasq/)
+        expect(result).to_not match(/stopped.*'dnsmasq/)
       end
     end
 
@@ -66,7 +66,7 @@ describe 'Kill Unmanaged Services' do
         on(host, 'puppet resource service dnsmasq ensure=running')
         result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
 
-        expect(result).to_not match(/Stopped.*'dnsmasq/)
+        expect(result).to_not match(/stopped.*'dnsmasq/)
       end
     end
   end

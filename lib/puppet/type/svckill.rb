@@ -77,6 +77,15 @@ module Puppet
       defaultto '/usr/local/etc/svckill.ignore'
     end
 
+    newparam(:verbose, :boolean => true) do
+      desc <<-EOM
+        If set, output all services that were affected by svckill.
+      EOM
+      newvalues(:true, :false)
+
+      defaultto :true
+    end
+
     newproperty(:mode) do
       desc <<-EOM
         If set to 'enforcing', will actually shut down and disable all
@@ -101,7 +110,44 @@ module Puppet
       end 
 
       def change_to_s(currentvalue, newvalue)
-        "Attempted to kill #{currentvalue.keys.count} services"
+        results = provider.results
+
+        output = []
+        err_output = []
+
+        if @resource[:verbose] == :true
+          output << "\n"
+          unless results[:stopped][:passed].empty?
+            output << results[:stopped][:passed].map{|x| x = "Svckill stopped '#{x}'"}.join("\n")
+          end
+          unless results[:disabled][:passed].empty?
+            output << results[:disabled][:passed].map{|x| x = "Svckill disabled '#{x}'"}.join("\n")
+          end
+        else
+          unless results[:stopped][:passed].empty?
+            output << "Stopped #{results[:stopped][:passed].count} services"
+          end
+          unless results[:disabled][:passed].empty?
+            output << "Disabled #{results[:disabled][:passed].count} services"
+          end
+        end
+
+        unless results[:stopped][:failed].empty?
+          err_output << results[:stopped][:failed].map{|x| x = "Svckill failed to stop '#{x}'"}.join("\n")
+        end
+
+        unless results[:disabled][:failed].empty?
+          err_output << 'Failed to disable the following services:'
+          err_output << results[:disabled][:failed].map{|x| x = "Svckill failed to disable '#{x}'"}.join("\n")
+        end
+
+        unless err_output.empty?
+          err_output.each do |kill_err|
+            Puppet.warning(kill_err)
+          end
+        end
+
+        (output + err_output).join("\n")
       end
     end
 
