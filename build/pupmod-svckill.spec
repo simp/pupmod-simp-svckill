@@ -1,7 +1,7 @@
 Summary: Svckill Puppet Module
 Name: pupmod-svckill
 Version: 1.1.0
-Release: 0
+Release: 1
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -52,6 +52,9 @@ mkdir -p %{buildroot}/%{prefix}/svckill
 # Post uninstall stuff
 
 %changelog
+* Tue Apr 12 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.1.0-1
+- Updated custom type to remove deprecation warning
+
 * Thu Mar 10 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
 - Added a 'verbose' option to svckill which will enumerate all actions on
   services if enabled.

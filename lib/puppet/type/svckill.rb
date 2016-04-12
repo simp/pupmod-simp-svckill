@@ -1,162 +1,160 @@
-module Puppet
-  newtype(:svckill) do
-    @doc = <<-EOM
-      Disables all services (recognized by the 'service' resource)
-      that are not defined in your Puppet manifests or listed.
+Puppet::Type.newtype(:svckill) do
+  @doc = <<-EOM
+    Disables all services (recognized by the 'service' resource)
+    that are not defined in your Puppet manifests or listed.
 
-      Any services listed in the $ignorefiles array will be ignored
-      for legacy compatibility.
+    Any services listed in the $ignorefiles array will be ignored
+    for legacy compatibility.
 
-      The following services are hard coded to never be killed by svckill:
-        * amtu
-        * blk-availability
-        * crond
-        * ebtables
-        * gpm
-        * haldaemon
-        * ip6tables
-        * iptables
-        * irqbalance
-        * killall
-        * libvirt-guests
-        * lvm2-monitor
-        * mcstrans
-        * mdmonitor
-        * messagebus
-        * netcf-transaction
-        * netfs
-        * netlabel
-        * network
-        * ntpdate
-        * portreserve
-        * puppet
-        * restorecond
-        * sandbox
-        * sshd
-        * sysstat
-        * udev-post
-        * getty*
-        * dbus*
+    The following services are hard coded to never be killed by svckill:
+      * amtu
+      * blk-availability
+      * crond
+      * ebtables
+      * gpm
+      * haldaemon
+      * ip6tables
+      * iptables
+      * irqbalance
+      * killall
+      * libvirt-guests
+      * lvm2-monitor
+      * mcstrans
+      * mdmonitor
+      * messagebus
+      * netcf-transaction
+      * netfs
+      * netlabel
+      * network
+      * ntpdate
+      * portreserve
+      * puppet
+      * restorecond
+      * sandbox
+      * sshd
+      * sysstat
+      * udev-post
+      * getty*
+      * dbus*
 
-     These are here because their status function is broken
-        * krb524
-        * mdmpd
-        * readahead_later
-        * rawdevices
-        * lm_sensors
-        * kudzu
+   These are here because their status function is broken
+      * krb524
+      * mdmpd
+      * readahead_later
+      * rawdevices
+      * lm_sensors
+      * kudzu
+  EOM
+
+  newparam(:name) do
+    desc <<-EOM
+      A static name assigned to this type. You can only declare
+      this type of resource once in your node scope.
     EOM
 
-    newparam(:name) do
-      desc <<-EOM
-        A static name assigned to this type. You can only declare
-        this type of resource once in your node scope.
-      EOM
+    isnamevar
 
-      isnamevar
+    defaultto 'svckill'
 
-      defaultto 'svckill'
-
-      validate do |value|
-        raise(ArgumentError,"Error: $name must be 'svckill'.") unless value == 'svckill'
-      end
-    end
-
-    newparam(:ignore) do
-      desc <<-EOM
-        An array of services to never kill. Can also accept a regex.
-      EOM
-    end
-
-    newparam(:ignorefiles) do
-      desc <<-EOM
-        An array of files containing a list of services to ignore, one per line.
-        Can also accept regexes in the file.
-      EOM
-
-      defaultto '/usr/local/etc/svckill.ignore'
-    end
-
-    newparam(:verbose, :boolean => true) do
-      desc <<-EOM
-        If set, output all services that were affected by svckill.
-      EOM
-      newvalues(:true, :false)
-
-      defaultto :true
-    end
-
-    newproperty(:mode) do
-      desc <<-EOM
-        If set to 'enforcing', will actually shut down and disable all
-        services not listed in your manifests or the exclusion file.
-
-        If set to 'warning', will only report on what would happen
-        without actually making the changes to the system.
-
-        Default: 'enforcing'
-      EOM
-
-      defaultto 'enforcing'
-
-      validate do |value|
-        if not ['enforcing','warning'].include?("#{value}") then
-          raise(ArgumentError,"'ensure' must be either 'enforcing' or 'warning'")
-        end
-      end
-
-      def insync?(is)
-        provider.insync?(is)
-      end 
-
-      def change_to_s(currentvalue, newvalue)
-        results = provider.results
-
-        output = []
-        err_output = []
-
-        if @resource[:verbose] == :true
-          output << "\n"
-          unless results[:stopped][:passed].empty?
-            output << results[:stopped][:passed].map{|x| x = "Svckill stopped '#{x}'"}.join("\n")
-          end
-          unless results[:disabled][:passed].empty?
-            output << results[:disabled][:passed].map{|x| x = "Svckill disabled '#{x}'"}.join("\n")
-          end
-        else
-          unless results[:stopped][:passed].empty?
-            output << "Stopped #{results[:stopped][:passed].count} services"
-          end
-          unless results[:disabled][:passed].empty?
-            output << "Disabled #{results[:disabled][:passed].count} services"
-          end
-        end
-
-        unless results[:stopped][:failed].empty?
-          err_output << results[:stopped][:failed].map{|x| x = "Svckill failed to stop '#{x}'"}.join("\n")
-        end
-
-        unless results[:disabled][:failed].empty?
-          err_output << 'Failed to disable the following services:'
-          err_output << results[:disabled][:failed].map{|x| x = "Svckill failed to disable '#{x}'"}.join("\n")
-        end
-
-        unless err_output.empty?
-          err_output.each do |kill_err|
-            Puppet.warning(kill_err)
-          end
-        end
-
-        (output + err_output).join("\n")
-      end
-    end
-
-    autorequire(:file) do
-      [self[:ignorefiles]]
-    end
-
-    autorequire(:concat_build) do
-      [self[:ignorefiles]]
+    validate do |value|
+      raise(ArgumentError,"Error: $name must be 'svckill'.") unless value == 'svckill'
     end
   end
-end 
+
+  newparam(:ignore) do
+    desc <<-EOM
+      An array of services to never kill. Can also accept a regex.
+    EOM
+  end
+
+  newparam(:ignorefiles) do
+    desc <<-EOM
+      An array of files containing a list of services to ignore, one per line.
+      Can also accept regexes in the file.
+    EOM
+
+    defaultto '/usr/local/etc/svckill.ignore'
+  end
+
+  newparam(:verbose, :boolean => true) do
+    desc <<-EOM
+      If set, output all services that were affected by svckill.
+    EOM
+    newvalues(:true, :false)
+
+    defaultto :true
+  end
+
+  newproperty(:mode) do
+    desc <<-EOM
+      If set to 'enforcing', will actually shut down and disable all
+      services not listed in your manifests or the exclusion file.
+
+      If set to 'warning', will only report on what would happen
+      without actually making the changes to the system.
+
+      Default: 'enforcing'
+    EOM
+
+    defaultto 'enforcing'
+
+    validate do |value|
+      if not ['enforcing','warning'].include?("#{value}") then
+        raise(ArgumentError,"'ensure' must be either 'enforcing' or 'warning'")
+      end
+    end
+
+    def insync?(is)
+      provider.insync?(is)
+    end 
+
+    def change_to_s(currentvalue, newvalue)
+      results = provider.results
+
+      output = []
+      err_output = []
+
+      if @resource[:verbose] == :true
+        output << "\n"
+        unless results[:stopped][:passed].empty?
+          output << results[:stopped][:passed].map{|x| x = "Svckill stopped '#{x}'"}.join("\n")
+        end
+        unless results[:disabled][:passed].empty?
+          output << results[:disabled][:passed].map{|x| x = "Svckill disabled '#{x}'"}.join("\n")
+        end
+      else
+        unless results[:stopped][:passed].empty?
+          output << "Stopped #{results[:stopped][:passed].count} services"
+        end
+        unless results[:disabled][:passed].empty?
+          output << "Disabled #{results[:disabled][:passed].count} services"
+        end
+      end
+
+      unless results[:stopped][:failed].empty?
+        err_output << results[:stopped][:failed].map{|x| x = "Svckill failed to stop '#{x}'"}.join("\n")
+      end
+
+      unless results[:disabled][:failed].empty?
+        err_output << 'Failed to disable the following services:'
+        err_output << results[:disabled][:failed].map{|x| x = "Svckill failed to disable '#{x}'"}.join("\n")
+      end
+
+      unless err_output.empty?
+        err_output.each do |kill_err|
+          Puppet.warning(kill_err)
+        end
+      end
+
+      (output + err_output).join("\n")
+    end
+  end
+
+  autorequire(:file) do
+    [self[:ignorefiles]]
+  end
+
+  autorequire(:concat_build) do
+    [self[:ignorefiles]]
+  end
+end
