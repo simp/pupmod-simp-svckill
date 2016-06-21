@@ -1,6 +1,6 @@
 {
   "name":    "simp-svckill",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author":  "simp",
   "summary": "Disables all services that are not controlled by Puppet.",
   "license": "Apache-2.0",
