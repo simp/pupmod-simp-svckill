@@ -1,19 +1,11 @@
-#
-# == Define: svckill::ignore
-#
 # Ensure that service $name will not be killed by svckill.
 #
-# == Parameters
+# @param name [String] The name of the service to prevent from being killed.
 #
-# [*name*]
-# Type: String
-#   The name of the service to prevent from being killed.
-#
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define svckill::ignore {
-  include 'svckill'
+  include '::svckill::ignore::collector'
 
   concat_fragment { "svckill_ignore+${name}.ignore": content => "${name}\n" }
 }
