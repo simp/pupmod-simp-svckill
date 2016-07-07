@@ -1,3 +1,7 @@
+* Thu Jul 07 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.3-0
+- Added missing requires file and updated module to auto-generate
+  lua spec file.
+
 * Tue Jun 21 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.2-0
 - Ensure that calling '::svckill::ignore' does not include '::svckill' by
   default.
