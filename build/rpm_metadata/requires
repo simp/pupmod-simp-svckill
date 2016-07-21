@@ -1,4 +1,1 @@
-Requires: puppet >= 3.3.0
-Requires: simp-bootstrap >= 4.2.0
-Obsoletes: pupmod-timezone >= 0.0.1
 Obsoletes: pupmod-svckill-test >= 0.0.1
