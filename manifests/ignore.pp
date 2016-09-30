@@ -7,5 +7,5 @@
 define svckill::ignore {
   include '::svckill::ignore::collector'
 
-  concat_fragment { "svckill_ignore+${name}.ignore": content => "${name}\n" }
+  simpcat_fragment { "svckill_ignore+${name}.ignore": content => "${name}\n" }
 }
