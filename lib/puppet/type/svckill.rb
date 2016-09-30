@@ -154,7 +154,7 @@ Puppet::Type.newtype(:svckill) do
     [self[:ignorefiles]]
   end
 
-  autorequire(:concat_build) do
+  autorequire(:simpcat_build) do
     [self[:ignorefiles]]
   end
 end
