@@ -10,7 +10,7 @@ class svckill::ignore::collector (
 
   validate_absolute_path($default_ignore_file)
 
-  concat_build { 'svckill_ignore':
+  simpcat_build { 'svckill_ignore':
     order  => ['*.ignore'],
     target => $default_ignore_file,
     quiet  => true
