@@ -106,7 +106,7 @@ Puppet::Type.newtype(:svckill) do
 
     def insync?(is)
       provider.insync?(is)
-    end 
+    end
 
     def change_to_s(currentvalue, newvalue)
       results = provider.results
