@@ -1,4 +1,8 @@
-* Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.0-0
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
+- Updated to use the version of 'simpcat' that does not conflict with
+  'puppetlabs/concat'.
+
+* Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
 - Updated to use the version of 'simpcat' that does not conflict with
   'puppetlabs/concat'.
 
