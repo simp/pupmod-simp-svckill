@@ -1,3 +1,6 @@
+* Thu Dec 15 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 3.0.0-0
+- Use strongly typed parameters
+
 * Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
 - Updated to use the version of 'simpcat' that does not conflict with
   'puppetlabs/concat'.

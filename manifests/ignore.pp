@@ -1,6 +1,6 @@
 # Ensure that service $name will not be killed by svckill.
 #
-# @param name [String] The name of the service to prevent from being killed.
+# @attr name The name of the service to prevent from being killed.
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
