@@ -1,11 +1,17 @@
 require 'spec_helper'
 
 describe 'svckill::ignore' do
+  context 'supported operating systems' do
+    on_supported_os.each do |os, os_facts|
+      let(:facts) { os_facts }
 
-  let(:title) { 'test' }
+      context "on #{os}" do
+        let(:title) { 'test' }
 
-  it { is_expected.to compile.with_all_deps }
-  it { is_expected.to create_simpcat_fragment("svckill_ignore+#{title}.ignore").with_content("#{title}\n") }
-  it { is_expected.to create_simpcat_build('svckill_ignore') }
-  it { is_expected.to_not create_svckill('svckill') }
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_concat__fragment("svckill_ignore_#{title}") }
+        it { is_expected.to_not create_svckill('svckill') }
+      end
+    end
+  end
 end

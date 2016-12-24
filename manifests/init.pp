@@ -35,24 +35,29 @@
 #   * sysstat
 #   * udev-post
 #
-# @param ignore  A list of services to never kill.
+# @param ignore
+#   A list of services to never kill
 #
-# @param ignore_files  A list of files that contain
-#   services to never kill, one per line.  You can add your own files here if
-#   you wish to use an alternate ignore list. The file specified in
-#   `::svckill::ignore::collector::default_ignore_file` will always be used but
-#   is fully managed by puppet.
+# @param ignore_files
+#   A list of files that contain services to never kill, one per line
 #
-# @param verbose  If set, svckill should report on exactly what it
-#   attempted to kill. If false, it will only report on the number of services
-#   that it attempted to kill.
+#   * You can add your own files here if you wish to use an alternate ignore
+#     list
+#   * The file specified in ``default_ignore_file`` will always be used but is
+#     fully managed by puppet
+#
+# @param verbose
+#   Report on exactly what ``svckill`` attempted to kill
+#
+#   * If ``false``, it will only report on the number of services that it
+#     attempted to kill
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class svckill (
-  Array[String] $ignore = [],
+  Array[String]               $ignore       = [],
   Array[Stdlib::Absolutepath] $ignore_files = [],
-  Boolean $verbose = true
+  Boolean                     $verbose      = true
 ){
   include '::svckill::ignore::collector'
 
