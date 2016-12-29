@@ -1,0 +1,3 @@
+svckill::ignore:
+        - ^ovirt-.*
+        - ^qemu-.*

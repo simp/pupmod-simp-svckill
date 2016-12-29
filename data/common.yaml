@@ -1,0 +1,14 @@
+svckill::ignore:
+        - auditd
+        - puppet
+        - puppetmaster
+        - crond
+        - sshd
+        - iptables
+        - ip6tables
+        - ebtables
+        - rc
+        - ^pe-.*
+lookup_options:
+        svckill::ignore:
+                merge: unique

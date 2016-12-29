@@ -1,3 +1,4 @@
+# vim: set expandtab sw=2 ts=2:
 # Svckill is a system that attempts to run with the security best
 # practice that "No unnecessary services should be running on the
 # system."
@@ -61,12 +62,10 @@ class svckill (
 ){
   include '::svckill::ignore::collector'
 
+  $flattened_ignore_files = flatten([$ignore_files, $::svckill::ignore::collector::default_ignore_file])
   svckill { 'svckill':
     ignore      => $ignore,
-    ignorefiles => flatten([
-      $ignore_files,
-      $::svckill::ignore::collector::default_ignore_file
-    ]),
+    ignorefiles => $flattened_ignore_files,
     verbose     => $verbose,
     require     => Class['svckill::ignore::collector']
   }
