@@ -1,0 +1,18 @@
+---
+svckill::ignore_defaults:
+  - auditd
+  - puppet
+  - puppetmaster
+  - crond
+  - sshd
+  - iptables
+  - ip6tables
+  - ebtables
+# This one is relevant to Upstart-based systems with rc.init
+# compatibility
+  - rc
+# exclude all PE services
+  - ^pe-.*
+lookup_options:
+  svckill::ignore_defaults:
+    merge: unique

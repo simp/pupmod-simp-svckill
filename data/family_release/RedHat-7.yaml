@@ -1,0 +1,20 @@
+---
+svckill::ignore_defaults:
+  - goferd
+  - ^systemd-nspawn@.*
+  - systemd-bootchart
+  - systemd-readahead-collect
+  - systemd-readahead-drop
+  - systemd-readahead-replay
+  - NetworkManager
+  - NetworkManager-dispatcher
+  - NetworkManager-wait-online
+  - microcode
+  - lvm2-lvmetad
+  - lvm2-lvmpolld
+  - lvm2-monitor
+  - kdump
+  - tuned
+  - rsyslog
+  - rhel-dmesg
+  - ^autovt@.*

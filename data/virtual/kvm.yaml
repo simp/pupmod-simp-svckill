@@ -1,0 +1,4 @@
+---
+svckill::ignore_defaults:
+  - ovirt-guest-agent
+  - qemu-guest-agent
