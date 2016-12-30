@@ -1,3 +1,4 @@
+---
 svckill::ignore:
-        - ^ovirt-.*
-        - ^qemu-.*
+  - ^ovirt-.*
+  - ^qemu-.*

@@ -1,4 +1,3 @@
-# vim: set expandtab sw=2 ts=2:
 # Svckill is a system that attempts to run with the security best
 # practice that "No unnecessary services should be running on the
 # system."

@@ -1,13 +1,14 @@
+---
 svckill::ignore:
-        - autovt
-        - goferd
-        - ^systemd-.*
-        - ^NetworkManager.*
-        - ^microcode.*
-        - ^lvm2.*
-        - ^kdump.*
-        - ^chronyd.*
-        - ^tuned.*
-        - ^rsyslog.*
-        - ^rhel-dmesg.*
-        - ^autovt.*
+  - autovt
+  - goferd
+  - ^systemd-.*
+  - ^NetworkManager.*
+  - ^microcode.*
+  - ^lvm2.*
+  - ^kdump.*
+  - ^chronyd.*
+  - ^tuned.*
+  - ^rsyslog.*
+  - ^rhel-dmesg.*
+  - ^autovt.*

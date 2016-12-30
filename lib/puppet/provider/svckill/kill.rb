@@ -1,4 +1,3 @@
-# vim: set expandtab ts=2 sw=2:
 Puppet::Type.type(:svckill).provide(:kill) do
 
   def initialize(*args)
