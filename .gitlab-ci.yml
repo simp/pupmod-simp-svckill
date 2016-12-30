@@ -4,7 +4,7 @@ unit-test:
   stage: test
   tags:
     - docker
-  image: ruby:21
+  image: ruby:2.1
   script:
     - bundle install
     - bundle exec rake spec
@@ -12,7 +12,7 @@ acceptance-test:
   stage: test
   tags:
     - docker
-  image: ruby:21
+  image: ruby:2.1
   script:
     - bundle install
     - bundle exec rake acceptance

@@ -56,6 +56,7 @@ describe 'Kill Unmanaged Services' do
 
         manifest = <<-EOS
           class { 'svckill':
+	    ignore => [ 'sshd' ],
             ignore_files => ['#{ignore_file}']
           }
 
