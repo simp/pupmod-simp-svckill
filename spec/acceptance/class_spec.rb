@@ -37,7 +37,7 @@ describe 'Kill Unmanaged Services' do
       it 'should not kill Dnsmasq' do
         manifest = <<-EOS
           class { 'svckill':
-            ignore => ['dnsmasq']
+            ignore => ['dnsmasq', 'sshd']
           }
 
           package { 'dnsmasq': ensure => 'present' }
@@ -56,7 +56,6 @@ describe 'Kill Unmanaged Services' do
 
         manifest = <<-EOS
           class { 'svckill':
-	    ignore => [ 'sshd' ],
             ignore_files => ['#{ignore_file}']
           }
 

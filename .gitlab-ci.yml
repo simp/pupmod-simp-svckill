@@ -3,7 +3,8 @@
 unit-test:
   stage: test
   tags:
-    - docker
+    - shell
+    - beaker
   image: ruby:2.1
   script:
     - bundle install
