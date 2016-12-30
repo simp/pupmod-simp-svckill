@@ -3,9 +3,7 @@
 unit-test:
   stage: test
   tags:
-    - shell
     - beaker
-  image: ruby:2.1
   script:
     - bundle install
     - bundle exec rake spec
