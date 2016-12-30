@@ -1,10 +1,12 @@
+# vim: set expandtab sw=2 ts=2:
 Puppet::Type.type(:svckill).provide(:kill) do
 
   def initialize(*args)
     super(*args)
 
     @systemctl = Puppet::Util.which('systemctl')
-
+#    @ignore = [ 'sshd']
+    @ignore = []
     # Put together a lookup table for all systemd services that have aliases.
     # This is so that we can prevent nuking a service accidentally by targeting
     # its alias.
@@ -49,7 +51,8 @@ Puppet::Type.type(:svckill).provide(:kill) do
     }.map{ |x| x = x[:name] }
 
     # Gather all items to ignore together
-    ignore = Array(@resource[:ignore]).collect{|x| x = x.strip} if @resource[:ignore]
+    ignore = @ignore
+    ignore += Array(@resource[:ignore]).collect{|x| x = x.strip} if @resource[:ignore]
 
     Array(@resource[:ignorefiles]).each do |ignorefile|
       begin
