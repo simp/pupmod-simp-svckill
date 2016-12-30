@@ -1,69 +1,12 @@
+# vim: set expandtab sw=2 ts=2:
 Puppet::Type.type(:svckill).provide(:kill) do
 
   def initialize(*args)
     super(*args)
 
-    # Services to *always* ignore
-    @ignore = [
-      'puppet',
-      'puppetmaster',
-      'crond',
-      'sshd',
-      'iptables',
-      'ip6tables',
-      'ebtables',
-      # This one is relevant to Upstart-based systems with rc.init
-      # compatibility
-      'rc'
-    ]
-
-    case Facter.value(:osfamily)
-    when 'RedHat'
-      @ignore += [
-        # If this dies, every unused mountpoint gets nuked!
-        'amtu',
-        'blk-availability',
-        # All sorts of bad things could happen here
-        'dbus.*',
-        # Don't kill the TTYs
-        'getty.*',
-        'gpm',
-        'haldaemon',
-        'irqbalance',
-        'killall',
-        # If this dies, all libvirt-based VMs are turned off.
-        # Unfortunately, it also has a 0 error code in most cases
-        # so is not a 'service' but a startup/shutdown utility.
-        'libvirt-guests',
-        'lvm2-monitor',
-        'mcstrans',
-        'mdmonitor',
-        'messagebus',
-        # Don't kill X, let runlevel do that for us.
-        'prefdm',
-        # This is just annoying. Doesn't do anything bad (or good)
-        # just annoying.
-        'netcf-transaction',
-        'netfs',
-        'netlabel',
-        'network',
-        'ntpdate',
-        'portreserve',
-        'restorecond',
-        'sandbox',
-        'sysstat',
-        'udev-post',
-        # These have broken statuses so svckill can't take care of them.
-        'krb524',
-        'mdmpd',
-        'readahead_later',
-        'lm_sensors',
-        'kudzu'
-      ]
-    end
-
     @systemctl = Puppet::Util.which('systemctl')
-
+#    @ignore = [ 'sshd']
+    @ignore = []
     # Put together a lookup table for all systemd services that have aliases.
     # This is so that we can prevent nuking a service accidentally by targeting
     # its alias.
@@ -81,7 +24,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
           next if service.include?('@')
 
           active_services << service.strip
-         end
+        end
       end
 
       %x{#{@systemctl} show -p Names #{active_services.to_a.join(' ')}}.split("\n").each do |svc_entry|
