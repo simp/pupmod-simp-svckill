@@ -49,17 +49,21 @@
 #   * The file specified in ``default_ignore_file`` will always be used but is
 #     fully managed by puppet
 #
+# @param mode
+#   The strategy svckill should use when it encounters undeclared services.
+#
+#   * If set to ``enforcing``, will actually shut down and disable all
+#     services not listed in your manifests or the exclusion file.
+#
+#   * If set to ``warning``, will only report on what would happen
+#     without actually making the changes to the system.
+#     attempted to kill
+#
 # @param verbose
 #   Report on exactly what ``svckill`` attempted to kill
 #
 #   * If ``false``, it will only report on the number of services that it
 #     attempted to kill
-#
-# @param debug
-#   Add notify resources to the catalog based on the union of ignore and
-#   ignore_defaults. 
-#   
-#
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
@@ -67,21 +71,17 @@ class svckill (
   Array[String]               $ignore       = [],
   Array[String]               $ignore_defaults = [],
   Array[Stdlib::Absolutepath] $ignore_files = [],
+  Enum['enforcing','warning'] $mode         = 'enforcing',
   Boolean                     $verbose      = true,
-  Boolean                     $debug        = false
 ){
   include '::svckill::ignore::collector'
   $combined_ignore_list = $ignore + $ignore_defaults
-  if ($debug == true) {
-    $combined_ignore_list.each |String $servicename| {
-      notify { "svckill::ignore - entry ${servicename}": }
-    }
-  }
   $flattened_ignore_files = flatten([$ignore_files, $::svckill::ignore::collector::default_ignore_file])
   svckill { 'svckill':
     ignore      => $combined_ignore_list,
     ignorefiles => $flattened_ignore_files,
     verbose     => $verbose,
+    mode        => $mode,
     require     => Class['svckill::ignore::collector']
   }
 }

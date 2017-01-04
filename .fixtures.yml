@@ -1,8 +1,14 @@
 ---
 fixtures:
   repositories:
-    concat: "https://github.com/simp/puppetlabs-concat"
-    simplib: "https://github.com/simp/pupmod-simp-simplib"
-    stdlib: "https://github.com/simp/puppetlabs-stdlib"
+    concat:
+      repo: "https://github.com/simp/puppetlabs-concat"
+      tag: 2.2.0
+    simplib:
+      repo: "https://github.com/simp/pupmod-simp-simplib"
+      tag: 3.1.0
+    stdlib:
+      repo: https://github.com/simp/puppetlabs-stdlib
+      tag: 4.13.1
   symlinks:
     svckill: "#{source_dir}"

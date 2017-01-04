@@ -48,18 +48,34 @@ Puppet::Type.type(:svckill).provide(:kill) do
     }.map{ |x| x = x[:name] }
 
     # Gather all items to ignore together
-    ignore = Array(@resource[:ignore]).collect{|x| x = x.strip} if @resource[:ignore]
+    if @resource[:ignore]
+      ignore = Array(@resource[:ignore]).collect{|x| x = x.strip}
+      Puppet.debug(
+        'svckill: ignore list from `:ignore` ' +
+        "(#{@resource[:ignore].size} entries):\n" +
+        %Q[#{@resource[:ignore].map{|x| "  - '#{x}'"}.join("\n")}]
+      )
+    end
 
     Array(@resource[:ignorefiles]).each do |ignorefile|
       begin
         if ignorefile and File.readable?(ignorefile) then
-          ignore += File.readlines(ignorefile).collect{|x| x = x.strip}
+          _ignorefile_list = File.readlines(ignorefile).collect{|x| x = x.strip}
+          _ignorefile_list.reject!{|x| x =~ /^#/}
+          ignore += _ignorefile_list
+          Puppet.debug(
+            "svckill: ignore list from `:ignorefile` '#{ignorefile}' " +
+            "(#{_ignorefile_list.size} entries):\n" +
+            %Q[#{_ignorefile_list.map{|x| "  - '#{x}'"}.join("\n")}]
+          )
+
         end
       rescue Exception => e
         Puppet.warning("svckill: Could not read svckill ignore file '#{ignorefile}', skipping: #{e}")
         next
       end
     end
+
 
     # Try to make this smart enough to only prod those items that are
     # actually running at this time.  No reason to disable things are
@@ -80,7 +96,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
       # This command is what actually checks the service on the
       # Skip anything that we're supposed to ignore
       if ignore.index{|x| Regexp.new("^#{x}$").match(obj_name) } then
-        Puppet.debug("svckill: Ignoring '#{obj_name}' due to ignore list")
+        Puppet.debug("svckill: Ignoring '#{obj_name}' due to ignore list YYY")
         next
       end
 
