@@ -69,5 +69,18 @@ describe 'Kill Unmanaged Services' do
         expect(result).to_not match(/stopped.*'dnsmasq/)
       end
     end
+
+    context 'with mode = warning' do
+      it 'should not kill Dnsmasq' do
+        manifest = <<-EOS
+          class { 'svckill': mode => 'warning' }
+        EOS
+
+        on(host, 'puppet resource service dnsmasq ensure=running')
+        result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
+
+        expect(result).to_not match(/stopped.*'dnsmasq/)
+      end
+    end
   end
 end

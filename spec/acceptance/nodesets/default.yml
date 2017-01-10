@@ -1,5 +1,5 @@
 HOSTS:
-  server5:
+  server-el7:
     roles:
       - server
       - master
@@ -7,7 +7,7 @@ HOSTS:
     box:        centos/7
     hypervisor: vagrant
 
-  server4:
+  server-el6:
     roles:
       - client
     platform:   el-6-x86_64

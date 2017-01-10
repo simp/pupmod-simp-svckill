@@ -10,7 +10,7 @@ describe 'svckill' do
         it { is_expected.to create_class('svckill') }
 
         it { is_expected.to create_concat('/usr/local/etc/svckill.ignore') }
-        it { is_expected.to create_svckill('svckill') }
+        it { is_expected.to create_svckill('svckill').with_mode('enforcing') }
       end
     end
   end

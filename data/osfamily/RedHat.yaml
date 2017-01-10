@@ -1,0 +1,40 @@
+---
+svckill::ignore_defaults:
+# If this dies, every unused mountpoint gets nuked!
+  - amtu
+  - blk-availability
+# All sorts of bad things could happen here
+  - dbus.*
+  - getty.*
+  - gpm
+  - haldaemon
+  - irqbalance
+  - killall
+# If this dies, all libvirt-based VMs are turned off.
+# Unfortunately, it also has a 0 error code in most cases
+# so is not a 'service' but a startup/shutdown utility.
+  - libvirt-guests
+  - lvm2-monitor
+  - mcstrans
+  - mdmonitor
+  - messagebus
+# Don't kill X, let runlevel do that for us
+  - prefdm
+# This is just annoying. Doesn't do anything bad (or good)
+# just annoying.
+  - netcf-transaction
+  - netfs
+  - netlabel
+  - network
+  - ntpdate
+  - portreserve
+  - restorecond
+  - sandbox
+  - sysstat
+  - udev-post
+# These have broken statuses so svckill can't take care of them.
+  - krb524
+  - mdmpd
+  - readahead_later
+  - lm_sensors
+  - kudzu
