@@ -7,7 +7,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
     # Put together a lookup table for all systemd services that have aliases.
     # This is so that we can prevent nuking a service accidentally by targeting
     # its alias.
-    if @systemctl then
+    if @systemctl
       @systemd_aliases = {}
 
       active_services = Set.new
@@ -25,11 +25,11 @@ Puppet::Type.type(:svckill).provide(:kill) do
       end
 
       %x{#{@systemctl} show -p Names #{active_services.to_a.join(' ')}}.split("\n").each do |svc_entry|
-        next if svc_entry.nil? or svc_entry.empty?
+        next if svc_entry.nil? || svc_entry.empty?
 
         service_names = svc_entry.split('=').last.split(/\s+/)
 
-        if service_names.size > 1 then
+        if service_names.size > 1
           service_names.each do |s_name|
             @systemd_aliases[s_name] ||= Set.new
 
@@ -59,7 +59,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
     Array(@resource[:ignorefiles]).each do |ignorefile|
       begin
-        if ignorefile and File.readable?(ignorefile) then
+        if ignorefile && File.readable?(ignorefile)
           _ignorefile_list = File.readlines(ignorefile).collect{|x| x = x.strip}
           _ignorefile_list.reject!{|x| x =~ /^#/}
           ignore += _ignorefile_list
@@ -85,9 +85,9 @@ Puppet::Type.type(:svckill).provide(:kill) do
       obj_name = obj[:name]
       obj_name = obj[:name].split('.service').first if obj[:provider] == :systemd
 
-      if Facter.value(:osfamily) == 'RedHat'
+      if Facter.value(:os)['family'] == 'RedHat'
         # Skip anything that is a leftover from RPM
-        if obj_name =~ /\.rpm(save|new)$/ then
+        if obj_name =~ /\.rpm(save|new)$/
           Puppet.debug("svckill: Ignoring '#{obj_name}' due to being an RPM leftover")
           next
         end
@@ -95,25 +95,25 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
       # This command is what actually checks the service on the
       # Skip anything that we're supposed to ignore
-      if ignore.index{|x| Regexp.new("^#{x}$").match(obj_name) } then
-        Puppet.debug("svckill: Ignoring '#{obj_name}' due to ignore list YYY")
+      if ignore.index{|x| Regexp.new("^#{x}$").match(obj_name) }
+        Puppet.debug("svckill: Ignoring '#{obj_name}' due to ignore list")
         next
       end
 
       # Skip anything that's in the catalog
       # This is a double check in case we're a systemd system
-      if all_services.include?(obj_name) or all_services.include?(obj[:name]) then
+      if all_services.include?(obj_name) || all_services.include?(obj[:name])
         Puppet.debug("svckill: Ignoring '#{obj_name}' due to being in the catalog")
         next
       end
 
       # Skip anything that has a systemd alias and the alias is in the catalog.
       # This prevents svckill from nuking services that have been aliased.
-      if @systemctl and @systemd_aliases[obj[:name]] then
+      if @systemctl && @systemd_aliases[obj[:name]]
         found = false
         @systemd_aliases[obj[:name]].each do |aliased_svc|
           # And, of course, we have to check for both forms again....
-          if all_services.include?(aliased_svc) or all_services.include?(aliased_svc.split('.service').first) then
+          if all_services.include?(aliased_svc) || all_services.include?(aliased_svc.split('.service').first)
             Puppet.debug("svckill: Ignoring '#{obj_name}' due to being in the catalog")
             found = true
             break
@@ -124,7 +124,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
       end
 
       # This is a super hack to get around PUP-2744
-      if Facter.value(:osfamily) == 'RedHat' and obj[:provider].eql?(:init) then
+      if Facter.value(:os)['family'] == 'RedHat' && obj[:provider].eql?(:init)
         obj[:provider] = :redhat
       end
 
@@ -133,12 +133,12 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
       # We have to account for traditional, upstart, and systemd services
       # differently.
-      if res[:provider].eql?(:upstart) then
-        if res[:ensure].eql?(:running) then
+      if res[:provider].eql?(:upstart)
+        if res[:ensure].eql?(:running)
           @running_services[obj[:name]] = obj.provider
         end
-      elsif [:redhat,:systemd].include?(res[:provider]) then
-        if res[:enable].to_s.eql?("true") or res[:ensure].eql?(:running) then
+      elsif [:redhat,:systemd].include?(res[:provider])
+        if res[:enable].to_s.eql?("true") || res[:ensure].eql?(:running)
           @running_services[obj[:name]] = {
             :provider => obj.provider,
             :resource => res
@@ -153,8 +153,8 @@ Puppet::Type.type(:svckill).provide(:kill) do
   end
 
   def insync?(is)
-    if Puppet[:noop] or @resource[:mode] == 'warning' then
-      if @running_services.nil? or @running_services.empty? then
+    if Puppet[:noop] || @resource[:mode] == 'warning'
+      if @running_services.nil? || @running_services.empty?
         Puppet.debug("svckill: Would not have killed any services.")
       else
         Puppet.warning("svckill: Would have killed:\n  svckill: #{@running_services.keys.join("\n  svckill: ")}")
@@ -181,7 +181,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
     @running_services.each_key do |svc|
       Puppet.debug("svckill: Attempting to stop service '#{svc}'")
 
-      if @running_services[svc][:resource][:ensure].eql?(:running) then
+      if @running_services[svc][:resource][:ensure].eql?(:running)
         begin
           @running_services[svc][:provider].send 'stop'
         rescue Puppet::Error => e
@@ -191,7 +191,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
         end
       end
 
-      if @running_services[svc][:resource][:enable].to_s.eql?('true') then
+      if @running_services[svc][:resource][:enable].to_s.eql?('true')
         begin
           @running_services[svc][:provider].send 'disable'
         rescue Puppet::Error => e
@@ -200,7 +200,18 @@ Puppet::Type.type(:svckill).provide(:kill) do
           @results[:disabled][:passed] << svc
         end
       end
+
+      # Need to clean this up since the report rendering call to `to_yaml`
+      # can't handle values that are symbols
+      #
+      # Additionally, this just becomes garbage that gets carried along by the
+      # catalog for no real reason.
+      @running_services[svc][:provider] = nil
+      @running_services[svc][:resource] = nil
+      @running_services[svc] = nil
     end
+
+    @running_services = nil
   end
 
   def results

@@ -99,7 +99,7 @@ Puppet::Type.newtype(:svckill) do
     defaultto 'enforcing'
 
     validate do |value|
-      if not ['enforcing','warning'].include?("#{value}") then
+      unless ['enforcing','warning'].include?("#{value}")
         raise(ArgumentError,"'ensure' must be either 'enforcing' or 'warning'")
       end
     end
@@ -115,7 +115,10 @@ Puppet::Type.newtype(:svckill) do
       err_output = []
 
       if @resource[:verbose] == :true
-        output << "\n"
+        # Ensure that our list of things that svckill is affecting begins on a
+        # new line for readability
+        output << ""
+
         unless results[:stopped][:passed].empty?
           output << results[:stopped][:passed].map{|x| x = "Svckill stopped '#{x}'"}.join("\n")
         end
