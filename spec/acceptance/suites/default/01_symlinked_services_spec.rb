@@ -25,7 +25,7 @@ describe 'not kill services which are symlinked to other services' do
       end
       it 'should run puppet and not kill the application' do
         result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
-        (require 'pry'; binding.pry) if ENV['BEAKER_pry'] && ENV['BEAKER_pry'].chomp == 'svckill'
+        (require 'pry'; binding.pry) if ENV.fetch('BEAKER_pry','').chomp == 'svckill'
 
         # svckill/service/systemctl already seems smart enough to treat
         # symlinked services the same as their targets
@@ -58,7 +58,7 @@ describe 'not kill services which are symlinked to other services' do
       end
       it 'should run puppet and not kill the application' do
         result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
-        (require 'pry'; binding.pry) if ENV['BEAKER_pry'] && ENV['BEAKER_pry'].chomp == 'svckill'
+        (require 'pry'; binding.pry) if ENV.fetch('BEAKER_pry','').chomp == 'svckill'
 
         expect(result).to_not match(/stopped.*'gdm/)
         expect(result).to_not match(/stopped.*'display-manager/)
