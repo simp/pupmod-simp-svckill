@@ -98,7 +98,7 @@ exceptions:
 You can set up svckill on a node by:
 
 ```puppet
-include svckill
+include 'svckill'
 ```
 
 ## Usage
@@ -110,7 +110,7 @@ There are two ways to solve this problem:
 Declare the service in puppet:
 
 ```puppet
-service{'myservice':
+service { 'myservice':
   ensure => running,
 }
 ```
@@ -118,7 +118,7 @@ service{'myservice':
 or Declare the service in an ignore list in svckill:
 
 ```puppet
-svckill{'myservice':
+svckill { 'myservice':
   ignore => ['myservice'],
 }
 ```
@@ -126,7 +126,7 @@ svckill{'myservice':
 ### I want to ignore a list of services I deploy in a file
 
 ```puppet
-svckill{'ourservices':
+svckill { 'ourservices':
   ignorefiles => '/opt/services',
 }
 ```
@@ -136,7 +136,7 @@ svckill{'ourservices':
 ```puppet
 site.pp
 
-class{'svckill':
+class { 'svckill':
   ignore => ['A',
              'B',
              'C'
@@ -147,9 +147,9 @@ class{'svckill':
 ### I don't want to kill a service, but I'd like to be alerted when it is running
 
 ```puppet
-class{'svckill':
+class { 'svckill':
   ignore => 'A',
-  mode => 'warning',
+  mode   => 'warning',
 }
 ```
 
