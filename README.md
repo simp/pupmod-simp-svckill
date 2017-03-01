@@ -6,12 +6,11 @@
 2. [Module Description - A Puppet module for managing svckill](#module-description)
 3. [Setup - The basics of getting started with pupmod-simp-svckill](#setup)
     * [What pupmod-simp-svckill affects](#what-simp-svckill-affects)
-    * [Setup requirements](#setup-requirements)
     * [Beginning with svckill](#beginning-with-svckill)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+6. [Limitations - OS compatibility, etc.](#limitations)
+7. [Development - Guide for contributing to the module](#development)
 
 ## This is a SIMP module
 This module is a component of the
@@ -90,8 +89,6 @@ exceptions:
       * lm_sensors
       * kudzu
 ```
-
-### Setup Requirements
 
 ### Beginning with svckill
 
@@ -248,7 +245,7 @@ changes to the system.
 This module is only designed to work in RHEL or CentOS 6 and 7. Any other
 operating systems have not been tested and results cannot be guaranteed.
 
-# Development
+## Development
 
 Please see the
 [SIMP Contribution Guidelines](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+SIMP).
