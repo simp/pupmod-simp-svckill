@@ -1,5 +1,11 @@
+* Fri Mar 17 2017 Nick Miller, Ryan Russell-Yates, Liz Nemsick - 3.1.1-0
+- Add acceptance test for symlinked services
+- Flesh out README
+- Remove OBE 'pe' requirement from metadata.json
+- Update puppet version in .travis.yaml
+
 * Fri Dec 30 2016 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.1.0-0
-- Use hiera moduledata instead of a hard coded arrray
+- Use hiera moduledata instead of a hard coded array
 - Add ignore for ^pe-.*  
 
 * Sat Dec 24 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
