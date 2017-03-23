@@ -1,3 +1,8 @@
+* Thu Mar 23 2017 Trevor Vaughan - 3.2.0-0
+- Enabled the new, kinder, svckill by setting the default mode to 'warning'
+- Added a `svckill::enable` parameter to be able to disable svckill from Hiera
+  easily
+
 * Fri Mar 17 2017 Nick Miller, Ryan Russell-Yates, Liz Nemsick - 3.1.1-0
 - Add acceptance test for symlinked services
 - Flesh out README

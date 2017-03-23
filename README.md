@@ -188,7 +188,7 @@ services not listed in your manifests or the exclusion file. If set to
 'warning', will only report on what would happen without actually making the
 changes to the system.
   * Valid Options: enforcing and warning.
-  * Default: `enforcing`.
+  * Default: `warning`.
 
 ### `svckill` Class
 
@@ -221,7 +221,7 @@ services not listed in your manifests or the exclusion file. If set to
 'warning', will only report on what would happen without actually making the
 changes to the system.
   * Valid Options: enforcing and warning.
-  * Default:`enforcing`.
+  * Default:`warning`.
 
 ### `svckill::ignore`
 
