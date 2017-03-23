@@ -93,10 +93,10 @@ Puppet::Type.newtype(:svckill) do
       If set to 'warning', will only report on what would happen
       without actually making the changes to the system.
 
-      Default: 'enforcing'
+      Default: 'warning'
     EOM
 
-    defaultto 'enforcing'
+    defaultto 'warning'
 
     validate do |value|
       unless ['enforcing','warning'].include?("#{value}")

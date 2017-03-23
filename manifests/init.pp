@@ -35,6 +35,9 @@
 #   * sysstat
 #   * udev-post
 #
+# @param enable
+#   Enable svckill on the system
+#
 # @param ignore
 #   A list of services to never kill
 #
@@ -68,20 +71,25 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class svckill (
-  Array[String]               $ignore       = [],
+  Boolean                     $enable          = true,
+  Array[String]               $ignore          = [],
   Array[String]               $ignore_defaults = [],
-  Array[Stdlib::Absolutepath] $ignore_files = [],
-  Enum['enforcing','warning'] $mode         = 'enforcing',
-  Boolean                     $verbose      = true,
+  Array[Stdlib::Absolutepath] $ignore_files    = [],
+  Enum['enforcing','warning'] $mode            = 'warning',
+  Boolean                     $verbose         = true,
 ){
-  include '::svckill::ignore::collector'
-  $combined_ignore_list = $ignore + $ignore_defaults
-  $flattened_ignore_files = flatten([$ignore_files, $::svckill::ignore::collector::default_ignore_file])
-  svckill { 'svckill':
-    ignore      => $combined_ignore_list,
-    ignorefiles => $flattened_ignore_files,
-    verbose     => $verbose,
-    mode        => $mode,
-    require     => Class['svckill::ignore::collector']
+  if $enable {
+    include '::svckill::ignore::collector'
+
+    $combined_ignore_list = $ignore + $ignore_defaults
+    $flattened_ignore_files = flatten([$ignore_files, $::svckill::ignore::collector::default_ignore_file])
+
+    svckill { 'svckill':
+      ignore      => $combined_ignore_list,
+      ignorefiles => $flattened_ignore_files,
+      verbose     => $verbose,
+      mode        => $mode,
+      require     => Class['svckill::ignore::collector']
+    }
   }
 }
