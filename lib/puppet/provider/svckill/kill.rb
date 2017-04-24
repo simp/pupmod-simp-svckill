@@ -8,7 +8,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
     # This is so that we can prevent nuking a service accidentally by targeting
     # its alias.
     if @systemctl
-      @systemd_aliases = {}
+      @systemd_aliases = []
 
       active_services = Set.new
 
@@ -24,21 +24,22 @@ Puppet::Type.type(:svckill).provide(:kill) do
         end
       end
 
-      %x{#{@systemctl} show -p Names #{active_services.to_a.join(' ')}}.split("\n").each do |svc_entry|
-        next if svc_entry.nil? || svc_entry.empty?
-
-        service_names = svc_entry.split('=').last.split(/\s+/)
-
-        if service_names.size > 1
-          service_names.each do |s_name|
-            @systemd_aliases[s_name] ||= Set.new
-
-            service_names.each do |s_name_alias|
-              @systemd_aliases[s_name] << s_name_alias unless s_name_alias == s_name
-            end
+      active_services.each do |svc|
+        begin
+          # Collect all active service names and aliases
+          svc_entries = (%x{#{@systemctl} show -p Names #{svc}}).split('=').last.split(/\s+/)
+          # If name returns more than one service entry, the service has an alias
+          if svc_entries.count > 1
+            @systemd_aliases << svc_entries
           end
+
+        # Service units cannot always be found. Skip them if they can't.
+        rescue Exception => e
+          Puppet.debug("svckill: #{e.message}")
+          next
         end
       end
+      @systemd_aliases.flatten!.uniq!
     end
   end
 
@@ -76,7 +77,6 @@ Puppet::Type.type(:svckill).provide(:kill) do
       end
     end
 
-
     # Try to make this smart enough to only prod those items that are
     # actually running at this time.  No reason to disable things are
     # are currently disabled.
@@ -109,12 +109,12 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
       # Skip anything that has a systemd alias and the alias is in the catalog.
       # This prevents svckill from nuking services that have been aliased.
-      if @systemctl && @systemd_aliases[obj[:name]]
+      if @systemctl && @systemd_aliases.include?(obj[:name])
         found = false
-        @systemd_aliases[obj[:name]].each do |aliased_svc|
+        @systemd_aliases.each do |aliased_svc|
           # And, of course, we have to check for both forms again....
           if all_services.include?(aliased_svc) || all_services.include?(aliased_svc.split('.service').first)
-            Puppet.debug("svckill: Ignoring '#{obj_name}' due to being in the catalog")
+            Puppet.debug("svckill: Ignoring #{aliased_svc} due to being in the catalog")
             found = true
             break
           end

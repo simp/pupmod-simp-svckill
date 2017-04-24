@@ -1,3 +1,9 @@
+* Wed Apr 19 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
+- In the service kill provider, not all services queried by 'Name'
+  with systemctl would return a name.  That caused a break in symlink
+  logic, rendering a majority of aliases to remain undetected.  Error
+  detection has been added and the symlink logic has been re-worked.
+
 * Thu Mar 23 2017 Trevor Vaughan - 3.2.0-0
 - Enabled the new, kinder, svckill by setting the default mode to 'warning'
 - Added a `svckill::enable` parameter to be able to disable svckill from Hiera
@@ -11,7 +17,7 @@
 
 * Fri Dec 30 2016 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.1.0-0
 - Use hiera moduledata instead of a hard coded array
-- Add ignore for ^pe-.*  
+- Add ignore for ^pe-.*
 
 * Sat Dec 24 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
 - Updated to use the Puppet Concat module
