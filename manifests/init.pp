@@ -6,7 +6,7 @@
 # and then shutdown and disable any that are not declared in a Puppet
 # manifest (or ignore list/file) somewhere.
 #
-# The following services will *never* be killed by svckill:
+# By default, the following services will *never* be killed by svckill:
 #   * amtu
 #   * blk-availability
 #   * crond
@@ -34,6 +34,14 @@
 #   * sshd
 #   * sysstat
 #   * udev-post
+#
+# You may override the default list in hiera, with the use of a
+# knockout prefix '--'. For example, to remove sshd from the default
+# whitelist:
+#
+# ---
+# svckill::ignore_defaults:
+#   - '--sshd'
 #
 # @param enable
 #   Enable svckill on the system
