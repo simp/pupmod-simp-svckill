@@ -85,7 +85,7 @@ class svckill (
     $flattened_ignore_files = flatten([$ignore_files, $::svckill::ignore::collector::default_ignore_file])
 
     svckill { 'svckill':
-      ignore      => $combined_ignore_list,
+      ignore      => simplib::knockout($combined_ignore_list),
       ignorefiles => $flattened_ignore_files,
       verbose     => $verbose,
       mode        => $mode,
