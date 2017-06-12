@@ -35,12 +35,12 @@
 #   * sysstat
 #   * udev-post
 #
-# You may override the default list in hiera, with the use of a
+# You may override the default ignore list in hiera, with the use of a
 # knockout prefix '--'. For example, to remove sshd from the default
 # whitelist:
 #
 # ---
-# svckill::ignore_defaults:
+# svckill::ignore:
 #   - '--sshd'
 #
 # @param enable
