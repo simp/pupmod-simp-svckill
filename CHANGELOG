@@ -1,3 +1,7 @@
+* Fry Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
+- Implemented simplib::knockout on the ignore list so users can
+  remove items in the default list via hiera.
+
 * Wed Apr 19 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
 - In the service kill provider, not all services queried by 'Name'
   with systemctl would return a name.  That caused a break in symlink
