@@ -1,0 +1,4 @@
+---
+
+svckill::ignore:
+  - '--sshd'
