@@ -1,4 +1,4 @@
-* Fry Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
+* Fri Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
 - Implemented simplib::knockout on the ignore list so users can
   remove items in the default list via hiera.
 
