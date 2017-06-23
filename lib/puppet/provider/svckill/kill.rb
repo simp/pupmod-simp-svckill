@@ -163,7 +163,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
       return true
     end
 
-    return @running_services.empty?
+    return @running_services.nil? || @running_services.empty?
   end
 
   def mode=(should)
