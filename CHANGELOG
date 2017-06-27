@@ -1,3 +1,7 @@
+* Fri Jun 23 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.1-0
+- Fix bug whereby svckill provider's insync_values? emits
+  'Unknown failure' message during normal operation.
+
 * Fri Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
 - Implemented simplib::knockout on the ignore list so users can
   remove items in the default list via hiera.
