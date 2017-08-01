@@ -6,6 +6,15 @@ describe 'svckill' do
       let(:facts) { os_facts }
 
       context "on #{os}" do
+        before :each do
+          # In some test environments (docker containers), systemctl
+          # is detected to be present but is not available to this
+          # process.  So, to prevent systemctl commands from being
+          # called by the svckill provider, mock the method the
+          # provider uses to determine if systemctl is available.
+          Puppet::Util.stubs(:which).with('systemctl').returns(nil)
+        end
+
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('svckill') }

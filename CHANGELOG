@@ -1,3 +1,6 @@
+* Tue Aug 01 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.2-0
+- Tweak spec tests so will run in docker containers
+
 * Fri Jun 23 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.1-0
 - Fix bug whereby svckill provider's insync_values? emits
   'Unknown failure' message during normal operation.
