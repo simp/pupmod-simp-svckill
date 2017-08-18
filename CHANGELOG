@@ -1,3 +1,6 @@
+* Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.3-0
+- Update concat version in metadata.json & build/rpm_metadata/requires
+
 * Tue Aug 01 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.2-0
 - Tweak spec tests so will run in docker containers
 
