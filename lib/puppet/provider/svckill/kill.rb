@@ -39,7 +39,8 @@ Puppet::Type.type(:svckill).provide(:kill) do
           next
         end
       end
-      @systemd_aliases.flatten!.uniq!
+      @systemd_aliases.flatten!
+      @systemd_aliases.uniq!
     end
   end
 
