@@ -55,6 +55,7 @@ describe 'not kill services which are symlinked to other services' do
         # dnsmasq is sometimes still running and triggers svckill
         on(host, 'puppet resource service dnsmasq ensure=stopped')
         on(host, 'yum install -y @x11 gdm gnome-shell gnome-session-xsession')
+        host.reboot
         on(host, 'systemctl enable gdm.service --now')
         on(host, 'systemctl set-default graphical.target')
         on(host, 'systemctl isolate graphical.target')
