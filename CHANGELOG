@@ -1,3 +1,8 @@
+* Fri Jul 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.6-0
+- Add simp_client_bootstrap service to the ignore list.  If this
+  is omitted from the ignore list, svckill will kill the bootstrap
+  process of SIMP clients, while they are boostrapping the system.
+
 * Fri Jun 22 2018 Nick Miller <nick.miller@onypoint.com> - 3.2.6-0
 - Update CI assets
 

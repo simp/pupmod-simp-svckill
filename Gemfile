@@ -21,6 +21,8 @@ group :test do
   gem 'facterdb'
 end
 
+gem 'net-telnet', '~> 0.1.1'
+
 group :development do
   gem 'pry'
   gem 'pry-doc'
