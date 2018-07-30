@@ -13,6 +13,7 @@ svckill::ignore_defaults:
   - rc
 # exclude all PE services
   - ^pe-.*
+  - simp_client_bootstrap
 lookup_options:
   svckill::ignore_defaults:
     merge: unique
