@@ -21,8 +21,6 @@ group :test do
   gem 'facterdb'
 end
 
-gem 'net-telnet', '~> 0.1.1'
-
 group :development do
   gem 'pry'
   gem 'pry-doc'
@@ -31,8 +29,5 @@ end
 group :system_tests do
   gem 'beaker'
   gem 'beaker-rspec'
-  if RUBY_VERSION <= '2.2.0'
-    gem 'fog-openstack', '<= 0.1.25'
-  end
   gem 'simp-beaker-helpers', ENV.fetch('SIMP_BEAKER_HELPERS_VERSION', '~> 1.10')
 end

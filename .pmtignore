@@ -14,4 +14,4 @@ vendor/
 junit/
 log/
 doc/
-.idea/
+tests/
