@@ -1,3 +1,6 @@
+* Fri Aug 24 2018 Nick Miller <nick.miller@onypoint.com> - 3.2.7-0
+- Add support for Puppet 5 and OEL
+
 * Fri Jul 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.6-0
 - Add simp_client_bootstrap service to the ignore list.  If this
   is omitted from the ignore list, svckill will kill the bootstrap
