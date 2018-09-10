@@ -1,4 +1,7 @@
-* Fri Aug 24 2018 Nick Miller <nick.miller@onypoint.com> - 3.2.7-0
+* Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.0-0
+- Update Hiera 4 to Hiera 5
+
+* Fri Aug 24 2018 Nick Miller <nick.miller@onypoint.com> - 3.3.0-0
 - Add support for Puppet 5 and OEL
 
 * Fri Jul 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.6-0
