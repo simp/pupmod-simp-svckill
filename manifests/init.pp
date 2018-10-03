@@ -6,34 +6,8 @@
 # and then shutdown and disable any that are not declared in a Puppet
 # manifest (or ignore list/file) somewhere.
 #
-# By default, the following services will *never* be killed by svckill:
-#   * amtu
-#   * blk-availability
-#   * crond
-#   * ebtables
-#   * gpm
-#   * haldaemon
-#   * ip6tables
-#   * iptables
-#   * irqbalance
-#   * killall
-#   * libvirt-guests
-#   * lvm2-monitor
-#   * mcstrans
-#   * mdmonitor
-#   * messagebus
-#   * netcf-transaction
-#   * netfs
-#   * netlabel
-#   * network
-#   * ntpdate
-#   * portreserve
-#   * puppet
-#   * restorecond
-#   * sandbox
-#   * sshd
-#   * sysstat
-#   * udev-post
+# By default, the services defined in hiera by svckill::ignore_defaults
+# will *never* be killed by svckill.
 #
 # You may override the default ignore list in hiera, with the use of a
 # knockout prefix '--'. For example, to remove sshd from the default

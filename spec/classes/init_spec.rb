@@ -20,10 +20,17 @@ describe 'svckill' do
           it { is_expected.to create_class('svckill') }
 
           it { is_expected.to create_concat('/usr/local/etc/svckill.ignore') }
-          it { is_expected.to create_svckill('svckill').with({
-            :mode => 'warning',
-            :ignore => ["goferd", "^systemd-nspawn@.*", "systemd-bootchart", "systemd-readahead-collect", "systemd-readahead-drop", "systemd-readahead-replay", "NetworkManager", "NetworkManager-dispatcher", "NetworkManager-wait-online", "microcode", "lvm2-lvmetad", "lvm2-lvmpolld", "lvm2-monitor", "kdump", "tuned", "rsyslog", "rhel-dmesg", "^autovt@.*", "amtu", "blk-availability", "dbus.*", "getty.*", "gpm", "haldaemon", "irqbalance", "killall", "libvirt-guests", "mcstrans", "mdmonitor", "messagebus", "prefdm", "netcf-transaction", "netfs", "netlabel", "network", "ntpdate", "portreserve", "restorecond", "sandbox", "sysstat", "udev-post", "krb524", "mdmpd", "readahead_later", "lm_sensors", "kudzu", "auditd", "puppet", "puppetmaster", "crond", "sshd", "iptables", "ip6tables", "ebtables", "rc", "^pe-.*", "simp_client_bootstrap"],
-          })}
+          it {
+            if facts[:os][:release][:major].to_s < '7'
+              expected_ignore_list = ["goferd", "^systemd-nspawn@.*", "systemd-bootchart", "systemd-readahead-collect", "systemd-readahead-drop", "systemd-readahead-replay", "NetworkManager", "NetworkManager-dispatcher", "NetworkManager-wait-online", "microcode", "lvm2-lvmetad", "lvm2-lvmpolld", "lvm2-monitor", "kdump", "tuned", "rsyslog", "rhel-dmesg", "^autovt@.*", "amtu", "blk-availability", "dbus.*", "getty.*", "gpm", "haldaemon", "irqbalance", "killall", "libvirt-guests", "mcstrans", "mdmonitor", "messagebus", "prefdm", "netcf-transaction", "netfs", "netlabel", "network", "ntpdate", "portreserve", "restorecond", "sandbox", "sysstat", "udev-post", "krb524", "mdmpd", "readahead_later", "lm_sensors", "kudzu", "auditd", "puppet", "puppetmaster", "crond","sshd", "iptables", "ip6tables", "ebtables", "rc", "^pe-.*", "simp_client_bootstrap"]
+            else
+              expected_ignore_list = ["goferd", "^systemd-nspawn@.*", "systemd-bootchart", "systemd-readahead-collect", "systemd-readahead-drop", "systemd-readahead-replay", "NetworkManager", "NetworkManager-dispatcher", "NetworkManager-wait-online", "microcode", "lvm2-lvmetad", "lvm2-lvmpolld", "lvm2-monitor", "kdump", "tuned", "rsyslog", "rhel-autorelabel-mark", "rhel-autorelabel", "rhel-configure","rhel-dmesg","rhel-import-state","rhel-loadmodules","rhel-readonly","selinuxfsrelabel", "^autovt@.*", "amtu", "blk-availability", "dbus.*", "getty.*", "gpm", "haldaemon", "irqbalance", "killall", "libvirt-guests", "mcstrans", "mdmonitor", "messagebus", "prefdm", "netcf-transaction", "netfs", "netlabel", "network", "ntpdate", "portreserve", "restorecond", "sandbox", "sysstat", "udev-post", "krb524", "mdmpd", "readahead_later", "lm_sensors", "kudzu", "auditd", "puppet", "puppetmaster", "crond","sshd", "iptables", "ip6tables", "ebtables", "rc", "^pe-.*", "simp_client_bootstrap"] 
+            end
+            is_expected.to create_svckill('svckill').with({
+              :mode => 'warning',
+              :ignore => expected_ignore_list, 
+            })
+          }
 
           context 'if disabling svckill' do
             let(:params) {{ :enable => false }}
@@ -37,11 +44,19 @@ describe 'svckill' do
           let(:hieradata) { 'no_sshd' }
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('svckill') }
-          it { is_expected.to create_svckill('svckill').with({
-            :mode => 'warning',
-            :ignore => ["goferd", "^systemd-nspawn@.*", "systemd-bootchart", "systemd-readahead-collect", "systemd-readahead-drop", "systemd-readahead-replay", "NetworkManager", "NetworkManager-dispatcher", "NetworkManager-wait-online", "microcode", "lvm2-lvmetad", "lvm2-lvmpolld", "lvm2-monitor", "kdump", "tuned", "rsyslog", "rhel-dmesg", "^autovt@.*", "amtu", "blk-availability", "dbus.*", "getty.*", "gpm", "haldaemon", "irqbalance", "killall", "libvirt-guests", "mcstrans", "mdmonitor", "messagebus", "prefdm", "netcf-transaction", "netfs", "netlabel", "network", "ntpdate", "portreserve", "restorecond", "sandbox", "sysstat", "udev-post", "krb524", "mdmpd", "readahead_later", "lm_sensors", "kudzu", "auditd", "puppet", "puppetmaster", "crond", "iptables", "ip6tables", "ebtables", "rc", "^pe-.*", "simp_client_bootstrap"],
-          })}
+          it {
+            if facts[:os][:release][:major].to_s < '7'
+              expected_ignore_list = ["goferd", "^systemd-nspawn@.*", "systemd-bootchart", "systemd-readahead-collect", "systemd-readahead-drop", "systemd-readahead-replay", "NetworkManager", "NetworkManager-dispatcher", "NetworkManager-wait-online", "microcode", "lvm2-lvmetad", "lvm2-lvmpolld", "lvm2-monitor", "kdump", "tuned", "rsyslog", "rhel-dmesg", "^autovt@.*", "amtu", "blk-availability", "dbus.*", "getty.*", "gpm", "haldaemon", "irqbalance", "killall", "libvirt-guests", "mcstrans", "mdmonitor", "messagebus", "prefdm", "netcf-transaction", "netfs", "netlabel", "network", "ntpdate", "portreserve", "restorecond", "sandbox", "sysstat", "udev-post", "krb524", "mdmpd", "readahead_later", "lm_sensors", "kudzu", "auditd", "puppet", "puppetmaster", "crond", "iptables", "ip6tables", "ebtables", "rc", "^pe-.*", "simp_client_bootstrap"]
+            else
+              expected_ignore_list = ["goferd", "^systemd-nspawn@.*", "systemd-bootchart", "systemd-readahead-collect", "systemd-readahead-drop", "systemd-readahead-replay", "NetworkManager", "NetworkManager-dispatcher", "NetworkManager-wait-online", "microcode", "lvm2-lvmetad", "lvm2-lvmpolld", "lvm2-monitor", "kdump", "tuned", "rsyslog", "rhel-autorelabel-mark", "rhel-autorelabel", "rhel-configure","rhel-dmesg","rhel-import-state","rhel-loadmodules","rhel-readonly","selinuxfsrelabel", "^autovt@.*", "amtu", "blk-availability", "dbus.*", "getty.*", "gpm", "haldaemon", "irqbalance", "killall", "libvirt-guests", "mcstrans", "mdmonitor", "messagebus", "prefdm", "netcf-transaction", "netfs", "netlabel", "network", "ntpdate", "portreserve", "restorecond", "sandbox", "sysstat", "udev-post", "krb524", "mdmpd", "readahead_later", "lm_sensors", "kudzu", "auditd", "puppet", "puppetmaster", "crond", "iptables", "ip6tables", "ebtables", "rc", "^pe-.*", "simp_client_bootstrap"] 
+            end
+            is_expected.to create_svckill('svckill').with({
+              :mode => 'warning',
+              :ignore => expected_ignore_list, 
+            })
+          }
         end
+
       end
     end
   end

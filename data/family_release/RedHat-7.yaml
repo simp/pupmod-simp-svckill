@@ -16,5 +16,12 @@ svckill::ignore_defaults:
   - kdump
   - tuned
   - rsyslog
+  - rhel-autorelabel-mark
+  - rhel-autorelabel
+  - rhel-configure
   - rhel-dmesg
+  - rhel-import-state
+  - rhel-loadmodules
+  - rhel-readonly
+  - selinuxfsrelabel
   - ^autovt@.*

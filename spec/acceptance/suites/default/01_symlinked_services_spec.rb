@@ -6,7 +6,8 @@ test_name 'svckill'
 describe 'not kill services which are symlinked to other services' do
   hosts.each do |host|
     # This issue only exists on systemd systems
-    next if JSON.load(fact_on(host, 'os', { :json => nil }))['os']['release']['major'] == '6'
+    os_result = fact_on(host, 'os')
+    next if os_result['release']['major'] == '6'
 
     context 'nfs and nfs-server' do
       let(:manifest) {
