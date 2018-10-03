@@ -50,7 +50,9 @@ ignore list will be disabled and turned off on a system. The following are
 exceptions:
 
 ```
-    The following services are hard coded to never be killed by svckill:
+    The following services are hard coded to never be killed by svckill
+    (see the module's hiera data, setting svckill::ignore_defaults, for a
+     comprehensive list):
       * amtu
       * blk-availability
       * crond

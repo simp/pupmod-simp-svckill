@@ -1,3 +1,6 @@
+* Tue Oct 02 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.3.0-0
+- Added Redhat 7.5 services to default service ignore list.
+
 * Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.0-0
 - Update Hiera 4 to Hiera 5
 
