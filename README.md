@@ -50,46 +50,20 @@ ignore list will be disabled and turned off on a system. The following are
 exceptions:
 
 ```
-    The following services are hard coded to never be killed by svckill
-    (see the module's hiera data, setting svckill::ignore_defaults, for a
-     comprehensive list):
-      * amtu
-      * blk-availability
-      * crond
-      * ebtables
-      * gpm
-      * haldaemon
-      * ip6tables
-      * iptables
-      * irqbalance
-      * killall
-      * libvirt-guests
-      * lvm2-monitor
-      * mcstrans
-      * mdmonitor
-      * messagebus
-      * netcf-transaction
-      * netfs
-      * netlabel
-      * network
-      * ntpdate
-      * portreserve
-      * puppet
-      * restorecond
-      * sandbox
-      * sshd
-      * sysstat
-      * udev-post
-      * getty*
-      * dbus*
+    A default list of services to ignore is kept in the modules hiera data in
+    parameter svckill::ignore_defaults.  It st is dpilt over several hiera files
+    according to  services that are common, os family related  and version related.
+    The arrays are merged and sorted uniquely during catalog compilation.
 
-   These are here because their status function is broken
-      * krb524
-      * mdmpd
-      * readahead_later
-      * rawdevices
-      * lm_sensors
-      * kudzu
+    These services will not be killed unless they removed using the knock out
+    prefix in svckill::ignore parameter.
+
+    The following is an example of a hiera entry that will remove a service on
+    the svckill::ignore_defaults list and allow svckill to kill this service:
+
+    ---
+    svckill::ignore:
+       - '--sshd'
 ```
 
 ### Beginning with svckill
