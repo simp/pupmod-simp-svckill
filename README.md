@@ -50,10 +50,11 @@ ignore list will be disabled and turned off on a system. The following are
 exceptions:
 
 ```
-    A default list of services to ignore is kept in the modules hiera data in
-    parameter svckill::ignore_defaults.  It is split over several hiera files
-    according to services that are common, os family related and version related.
-    The arrays are merged and sorted uniquely during catalog compilation.
+    A default list of services to ignore is kept in the module's hiera data for
+    the parameter svckill::ignore_defaults.  This default list is split over
+    several hiera files, grouped as services that are common, services that
+    are os family related and services that are version related. The arrays
+    are merged and sorted uniquely during catalog compilation.
 
     These services will not be killed unless they are removed using the knock out
     prefix in the svckill::ignore parameter.
