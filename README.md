@@ -51,12 +51,12 @@ exceptions:
 
 ```
     A default list of services to ignore is kept in the modules hiera data in
-    parameter svckill::ignore_defaults.  It st is dpilt over several hiera files
+    parameter svckill::ignore_defaults.  It it is spilt over several hiera files
     according to  services that are common, os family related  and version related.
     The arrays are merged and sorted uniquely during catalog compilation.
 
-    These services will not be killed unless they removed using the knock out
-    prefix in svckill::ignore parameter.
+    These services will not be killed unless they are removed using the knock out
+    prefix in the svckill::ignore parameter.
 
     The following is an example of a hiera entry that will remove a service on
     the svckill::ignore_defaults list and allow svckill to kill this service:
