@@ -1,3 +1,7 @@
+* Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.1-0
+- Expanded the upper limit of the concat and stdlib Puppet module versions
+- Fixed bad URLs in the README.md
+
 * Tue Oct 02 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.3.0-0
 - Added Redhat 7.5 services to default service ignore list.
 - Updated ruby version to 2.4.4

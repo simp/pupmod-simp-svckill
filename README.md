@@ -24,7 +24,7 @@ a compliance-management framework built on Puppet.
 If you find any issues, they can be submitted to our
 [JIRA](https://simp-project.atlassian.net/).
 
-Please read our [Contribution Guide](http://simp-doc.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 This module is optimally designed for use within a larger SIMP ecosystem, but it
 can be used independently:
@@ -227,7 +227,7 @@ operating systems have not been tested and results cannot be guaranteed.
 
 ## Development
 
-Please read our [Contribution Guide](http://simp-doc.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 Visit the project homepage on [GitHub](https://simp-project.com),
 and look at our issues on  [JIRA](https://simp-project.atlassian.net/).
