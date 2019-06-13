@@ -95,9 +95,7 @@ service { 'myservice':
 or Declare the service in an ignore list in svckill:
 
 ```puppet
-svckill { 'myservice':
-  ignore => ['myservice'],
-}
+svckill::ignore { 'myservice': }
 ```
 
 ### I want to ignore a list of services I deploy in a file

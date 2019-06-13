@@ -1,3 +1,11 @@
+* Wed Jun 12 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.4.0-0
+- Update CI artifacts
+- Remove Puppet 4 support
+- Add Puppet 6 support
+
+* Wed Jun 12 2019 Robert Clark <rbclark@mitre.org> - 3.4.0-0
+- Fix error in README regarding proper svckill exception outside of Hiera
+
 * Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.1-0
 - Expanded the upper limit of the concat and stdlib Puppet module versions
 - Fixed bad URLs in the README.md
