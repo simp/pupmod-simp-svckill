@@ -1,0 +1,18 @@
+---
+version: 2.0.0
+checks:
+  oval:com.puppet.forge.simp.svckill.mode:
+    settings:
+      parameter: svckill::mode
+      value: enforcing
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      disa_stig: true
+      cci:CCI-000381: true
+      nist_800_53:rev4:CM-7: true
+    identifiers:
+      disa_stig:
+      - CCI-000381
+      nist_800_53:rev4:
+      - CM-7
