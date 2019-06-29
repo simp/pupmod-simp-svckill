@@ -16,6 +16,3 @@ checks:
       - CCI-000381
       nist_800_53:rev4:
       - CM-7
-    confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
