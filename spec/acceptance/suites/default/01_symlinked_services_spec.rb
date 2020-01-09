@@ -23,8 +23,16 @@ describe 'not kill services which are symlinked to other services' do
       it 'should set up an essential service' do
         # dnsmasq is sometimes still running and triggers svckill
         on(host, 'puppet resource service dnsmasq ensure=stopped')
-        on(host, 'puppet resource package nfs ensure=latest')
-        on(host, 'puppet resource service nfs ensure=running')
+
+        nfs_package = nil
+        if os_result['release']['major'].to_i < 8
+          nfs_package = 'nfs'
+        else
+          nfs_package = 'nfs-utils'
+        end
+
+        on(host, "puppet resource package #{nfs_package} ensure=latest")
+        on(host, "puppet resource service #{nfs_package} ensure=running")
       end
 
       it 'should run puppet and not kill the application' do
@@ -59,7 +67,15 @@ describe 'not kill services which are symlinked to other services' do
         else
           # dnsmasq is sometimes still running and triggers svckill
           on(host, 'puppet resource service dnsmasq ensure=stopped')
-          on(host, 'yum install -y @x11 gdm gnome-shell gnome-session-xsession')
+
+          install_cmd = nil
+          if os_result['release']['major'].to_i < 8
+            install_cmd = 'yum install -y @x11 gdm gnome-shell gnome-session-xsession'
+          else
+            install_cmd = 'dnf install -y @base-x gdm gnome-shell gnome-session-xsession'
+          end
+
+          on(host, install_cmd)
           host.reboot
           on(host, 'systemctl enable gdm.service --now')
           on(host, 'systemctl set-default graphical.target')
