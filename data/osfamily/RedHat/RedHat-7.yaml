@@ -1,0 +1,39 @@
+---
+svckill::ignore_defaults:
+  - goferd
+# Don't know if they will have iptables of firewalld installed but don't want to kill them
+  - iptables
+  - ip6tables
+  - ebtables
+  - firewalld
+  - nftables
+#  Can have Network manager installed along with network
+#
+  - NetworkManager
+  - NetworkManager-dispatcher
+  - NetworkManager-wait-online
+  - network
+#
+# This one is relevant to Upstart-based systems with rc.init
+# compatibility
+  - rc
+  - ^systemd-nspawn@.*
+  - systemd-bootchart
+# Read ahead was remove in systemd version 222 so these will not be in el8.
+  - systemd-readahead-collect
+  - systemd-readahead-drop
+  - systemd-readahead-replay
+  - microcode
+  - kdump
+  - rsyslog
+  - rhel-autorelabel-mark
+  - rhel-autorelabel
+  - rhel-configure
+  - rhel-dmesg
+  - rhel-import-state
+  - rhel-loadmodules
+  - rhel-readonly
+  - selinuxfsrelabel
+  - ^autovt@.*
+# selinux process that was changed during el7 devel but may be present
+  - sandbox

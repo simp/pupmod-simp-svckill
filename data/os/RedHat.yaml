@@ -1,0 +1,4 @@
+---
+svckill::ignore_defaults:
+# Don't kill red hat subscription manager
+  - ^rhsm*

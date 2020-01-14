@@ -1,6 +1,13 @@
 * Thu Jan 09 2020 Liz Nemsick <lnemsick.simp@gmail.com> - 3.6.0-0
 - Add EL8 support
 - Update the upper bound of simp-simplib to < 5.0.0
+- Updated service lists:
+  - moved services that were deprecated in el7 from common list
+    to RedHat-6 list.
+  - Moved family_versions under osfamily just to make it neater.
+  - Put more comments in the ignore lists for services.
+  - Added new el8 services to RedHat-8.yaml
+  - Added RedHat subscription manager services to RedHat OS list.
 
 * Fri Aug 02 2019 Robert Vincent <pillarsdotnet@gmail.com> - 3.6.0-0
 - Support puppetlabs/concat 6.x.
