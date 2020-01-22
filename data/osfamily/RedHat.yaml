@@ -1,26 +1,28 @@
 ---
 svckill::ignore_defaults:
-# All sorts of bad things could happen here
-# Systm daemons
+# System daemons. All sorts of bad things could happen here.
   - dbus.*
   - getty.*
   - irqbalance
-# mouse control service run if graphical console installed
+#
+# Mouse control service run if graphical console installed
   - gpm
 #
 # Old name for dbus and alias for dbus in el7 and later
   - messagebus
+#
 # If this dies, all libvirt-based VMs are turned off.
 # Unfortunately, it also has a 0 error code in most cases
 # so is not a 'service' but a startup/shutdown utility.
   - libvirt-guests
-# services installed by the logical volume manager lvm2
+#
+# Services installed by the logical volume manager lvm2
   - blk-availability
   - lvm2-lvmetad
   - lvm2-lvmpolld
   - lvm2-monitor
 #
-# service run when  mdadm is installed
+# Service run when  mdadm is installed
   - mdmonitor
 #
 # mcstrans service used by selinux when mctrans is installed.
@@ -33,6 +35,7 @@ svckill::ignore_defaults:
 # This is just annoying. Doesn't do anything bad (or good)
 # just annoying.
   - netcf-transaction
+#
 # Installed when netlabel_tools is install.
 # used by kernel security modules to attach security attributes to outgoing network packets
   - netlabel
@@ -47,7 +50,7 @@ svckill::ignore_defaults:
 # gather statistics. Not installed by default.
   - sysstat
 #
-#  Not sure if this is used in el8 or later but leaving in family settings.
+# Not sure if this is used in el8 or later but leaving in family settings.
 # Don't kill X, let runlevel do that for us
   - prefdm
 #
