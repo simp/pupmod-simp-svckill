@@ -1,40 +1,61 @@
 ---
 svckill::ignore_defaults:
-# If this dies, every unused mountpoint gets nuked!
-  - amtu
-  - blk-availability
-# All sorts of bad things could happen here
+# System daemons. All sorts of bad things could happen here.
   - dbus.*
   - getty.*
-  - gpm
-  - haldaemon
   - irqbalance
-  - killall
+#
+# Mouse control service run if graphical console installed
+  - gpm
+#
+# Old name for dbus and alias for dbus in el7 and later
+  - messagebus
+#
 # If this dies, all libvirt-based VMs are turned off.
 # Unfortunately, it also has a 0 error code in most cases
 # so is not a 'service' but a startup/shutdown utility.
   - libvirt-guests
+#
+# Services installed by the logical volume manager lvm2
+  - blk-availability
+  - lvm2-lvmetad
+  - lvm2-lvmpolld
   - lvm2-monitor
-  - mcstrans
+#
+# Service run when  mdadm is installed
   - mdmonitor
-  - messagebus
-# Don't kill X, let runlevel do that for us
-  - prefdm
+#
+# mcstrans service used by selinux when mctrans is installed.
+  - mcstrans
+#
+# Part of the ntpd service.  Although not installed by default on
+# el8 and later, ntp can still be used and is not covered in ntpd module.
+  - ntpdate
+#
 # This is just annoying. Doesn't do anything bad (or good)
 # just annoying.
   - netcf-transaction
-  - netfs
+#
+# Installed when netlabel_tools is install.
+# used by kernel security modules to attach security attributes to outgoing network packets
   - netlabel
-  - network
-  - ntpdate
+#
+# Service run when portreserve is installed
   - portreserve
+#
+#  Services installed by policycoreutils-* to support selinux
   - restorecond
-  - sandbox
+#
+# Service installed by sysstat rpm used to monitor system and
+# gather statistics. Not installed by default.
   - sysstat
-  - udev-post
+#
+# Not sure if this is used in el8 or later but leaving in family settings.
+# Don't kill X, let runlevel do that for us
+  - prefdm
+#
 # These have broken statuses so svckill can't take care of them.
   - krb524
   - mdmpd
   - readahead_later
   - lm_sensors
-  - kudzu

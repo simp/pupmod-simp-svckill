@@ -5,11 +5,11 @@ defaults:
   data_hash: yaml_data
 hierarchy:
   - name: "OSFamily + Release"
-    path: "family_release/%{facts.osfamily}-%{facts.operatingsystemmajrelease}.yaml"
-  - name: "OS"
-    path: "os/%{facts.operatingsystem}.yaml"
+    path: "osfamily/%{facts.os.family}/%{facts.os.family}-%{facts.os.release.major}.yaml"
   - name: "OS Family"
-    path: "osfamily/%{facts.osfamily}.yaml"
+    path: "osfamily/%{facts.os.family}.yaml"
+  - name: "OS"
+    path: "os/%{facts.os.name}.yaml"
   - name: "Virtual"
     path: "virtual/%{facts.virtual}.yaml"
   - name: "Common"

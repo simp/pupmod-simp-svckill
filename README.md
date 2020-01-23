@@ -130,98 +130,14 @@ class { 'svckill':
 
 ## Reference
 
-### Types
-* ['svckill'](#svckill-type): Type used to declare services to ignore.
-
-### Public Classes
-* ['svckill'](#svckill-class): Main class used to set up a set of default
-services to ignore in an infrastructure.
-* ['svckill::ignore'](#svckillignore): Ensure a service will not be killed by
-svckill
-* ['svckill::ignore::collector'](#svckillignorecollector): Build default ignore
-file for svckill
-
-### `svckill` Type
-
-#### Parameters
-
-##### ignore
-  An array of services to never kill. Can also accept a regex.
-  * Valid Options: Array of Strings.
-
-##### ignorefiles
-  An array of files containing a list of services to ignore, one
-per line. Can also accept regexes in the file.
-  * Valid Options: Array of Strings.
-  * Default: `/usr/local/etc/svckill.ignore`
-
-##### verbose
-  If set, output all services that were affected by svckill.
-  * Valid Options: true or false.
-  * Default: `true`
-
-##### mode
-  If set to 'enforcing', will actually shut down and disable all
-services not listed in your manifests or the exclusion file. If set to
-'warning', will only report on what would happen without actually making the
-changes to the system.
-  * Valid Options: enforcing and warning.
-  * Default: `warning`.
-
-### `svckill` Class
-
-#### Parameters
-
-##### ignore
-  An array of services to never kill. Can also accept a regex.
-  * Valid Options: Array of Strings.
-  * Default: `[]`.
-
-##### ignore_defaults
-  An internal list of embedded services to never kill.
-  * Valid Options: Array of Strings.
-  * Default: `[]`.
-
-##### ignore_files
-  An array of files containing a list of services to ignore, one
-per line. Can also accept regexes in the file.
-  * Valid Options: Array of Strings.
-  * Default: `[]`.
-
-##### verbose
-  If set, output all services that were affected by svckill.
-  * Valid Options: true or false.
-  * Default: `true`
-
-##### mode
-  If set to 'enforcing', will actually shut down and disable all
-services not listed in your manifests or the exclusion file. If set to
-'warning', will only report on what would happen without actually making the
-changes to the system.
-  * Valid Options: enforcing and warning.
-  * Default:`warning`.
-
-### `svckill::ignore`
-
-#### Parameters
-
-##### name
-  Name of service to ignore with svckill.
-  * Valid Options: String.
-
-### `svckill::ignore::collector`
-
-#### Parameters
-
-##### default_ignore_file
-  Path to ignore file.
-  * Valid Options: Absolute Path.
-  * Default: `/usr/local/etc/svckill.ignore`.
+Please refer to the [REFERENCE.md](./REFERENCE.md).
 
 ## Limitations
 
-This module is only designed to work in RHEL or CentOS 6 and 7. Any other
-operating systems have not been tested and results cannot be guaranteed.
+SIMP Puppet modules are generally intended for use on Red Hat Enterprise
+Linux and compatible distributions, such as CentOS. Please see the
+[`metadata.json` file](./metadata.json) for the most up-to-date list of
+supported operating systems, Puppet versions, and module dependencies.
 
 ## Development
 
