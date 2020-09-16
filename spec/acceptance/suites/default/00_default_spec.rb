@@ -35,6 +35,13 @@ EOM
         result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
         expect(result).to_not match(/stopped.*'dnsmasq/)
       end
+
+      it 'should not kill static services' do
+        on(host, 'puppet resource package polkit ensure=installed')
+        on(host, 'puppet resource service polkit ensure=running')
+        result = apply_manifest_on(host, 'include "svckill"', :catch_failures => true).stdout
+        expect(result).to_not match(/stopped.*'polkit/)
+      end
     end
 
     context 'with an explicit ignore list' do

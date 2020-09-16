@@ -1,3 +1,9 @@
+* Wed Sep 16 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.6.1-0
+- Puppet changed the service provider to return service units whose
+  state is static.  Because of this svckill was trying to kill system
+  processes.  This change updates the svckill provider to remove
+  static services from the kill list.
+
 * Thu Jan 09 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.6.0-0
 - Add EL8 support
 - Update the upper bound of simp-simplib to < 5.0.0

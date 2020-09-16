@@ -140,10 +140,14 @@ Puppet::Type.type(:svckill).provide(:kill) do
         end
       elsif [:redhat,:systemd].include?(res[:provider])
         if res[:enable].to_s.eql?("true") || res[:ensure].eql?(:running)
-          @running_services[obj[:name]] = {
-            :provider => obj.provider,
-            :resource => res
-          }
+          unless ['static'].include? %x("#{@systemctl}" is-enabled "#{obj[:name]}").strip
+            @running_services[obj[:name]] = {
+              :provider => obj.provider,
+              :resource => res
+            }
+          else
+            Puppet.debug("svckill: Ignoring #{obj[:name]} due to it being static|indirect")
+          end
         end
       else
         Puppet.warning("The svckill provider does not yet support service provider type #{res[:provider]} for service #{obj_name}")
