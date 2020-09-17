@@ -140,20 +140,34 @@ Puppet::Type.type(:svckill).provide(:kill) do
         end
       elsif [:redhat,:systemd].include?(res[:provider])
         if res[:enable].to_s.eql?("true") || res[:ensure].eql?(:running)
-          unless ['static'].include? %x("#{@systemctl}" is-enabled "#{obj[:name]}").strip
+          add_service = false
+          if  !obj.provider.respond_to?(:cached_enabled?)
+            #  If the service is not systemd it will not respond to cached_enabled and it is ok to
+            #  add it.
+            add_service = true
+          else
+            # If it is a systemd service check the enabled state.  Kill only enabled or diabled
+            # services.  Killing others can cause system errors.
+            # One version of puppet agent returns a Hash (v5.5.20) all
+            # others return a string
+            cached_enabled_value = obj.provider.cached_enabled?
+            obj_enabled = cached_enabled_value
+            obj_enabled = cached_enabled_value[:output] if cached_enabled_value.is_a?(Hash)
+            add_service = true if ['enabled', 'disabled'].include?(obj_enabled)
+          end
+          if add_service
             @running_services[obj[:name]] = {
               :provider => obj.provider,
               :resource => res
             }
           else
-            Puppet.debug("svckill: Ignoring #{obj[:name]} due to it being static|indirect")
+            Puppet.debug("svckill: Ignoring  #{obj[:name]} because it is not enabled|disabled")
           end
         end
       else
         Puppet.warning("The svckill provider does not yet support service provider type #{res[:provider]} for service #{obj_name}")
       end
     end
-
     return @running_services
   end
 
