@@ -1,3 +1,6 @@
+* Sat Dec 19 2020 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.6.2
+- Removed EL6 support
+
 * Wed Sep 16 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.6.1-0
 - Puppet changed the service provider to return service units whose
   state is static.  Because of this svckill was trying to kill system
