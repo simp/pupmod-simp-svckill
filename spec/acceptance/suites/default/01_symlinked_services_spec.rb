@@ -37,7 +37,7 @@ describe 'not kill services which are symlinked to other services' do
         end
 
         on(host, "puppet resource package #{nfs_package} ensure=latest")
-        on(host, "puppet resource service #{nfs_package} ensure=running")
+        on(host, "puppet resource service nfs-server ensure=running")
       end
 
       it 'should run puppet and not kill the application' do
