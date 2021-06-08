@@ -1,6 +1,6 @@
 {
   "name": "simp-svckill",
-  "version": "3.6.2",
+  "version": "3.7.0",
   "author": "SIMP Team",
   "summary": "Disables all services that are not controlled by Puppet.",
   "license": "Apache-2.0",
@@ -51,7 +51,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 8.0.0"
     }
   ]
 }
