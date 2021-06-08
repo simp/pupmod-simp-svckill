@@ -69,7 +69,7 @@ describe 'not kill services which are symlinked to other services' do
           on(host, 'puppet resource service dnsmasq ensure=stopped')
 
           install_cmd = nil
-          if fact_on(host, 'os.release.major')
+          if fact_on(host, 'os.release.major').to_i < 8
             install_cmd = 'yum install -y @x11 gdm gnome-shell gnome-session-xsession'
           else
             install_cmd = 'dnf install -y @base-x gdm gnome-shell gnome-session-xsession'
