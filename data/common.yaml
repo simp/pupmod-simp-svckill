@@ -1,9 +1,10 @@
 ---
 svckill::ignore_defaults:
   - auditd
+  - crond
   - puppet
   - puppetmaster
-  - crond
+  - rngd
   - sshd
 # exclude all PE services
   - ^pe-.*

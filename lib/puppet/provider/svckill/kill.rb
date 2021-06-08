@@ -1,4 +1,8 @@
 Puppet::Type.type(:svckill).provide(:kill) do
+  desc <<-DESC
+    Stop and disable services that are no present in the puppet catalog or an ignore list.
+  DESC
+
 
   def initialize(*args)
     super(*args)

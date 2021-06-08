@@ -15,11 +15,11 @@
 
 ### Resource types
 
-* [`svckill`](#svckill): Disables all services (recognized by the 'service' resource)  that are not defined in your Puppet manifests or listed.   Any services listed 
+* [`svckill`](#svckill): Disables all services (recognized by the 'service' resource) that are not defined in your Puppet manifests or listed.  Any services listed in
 
 ## Classes
 
-### `svckill`
+### <a name="svckill"></a>`svckill`
 
 Svckill is a system that attempts to run with the security best
 practice that "No unnecessary services should be running on the
@@ -42,9 +42,16 @@ svckill::ignore:
 
 #### Parameters
 
-The following parameters are available in the `svckill` class.
+The following parameters are available in the `svckill` class:
 
-##### `enable`
+* [`enable`](#enable)
+* [`ignore`](#ignore)
+* [`ignore_defaults`](#ignore_defaults)
+* [`ignore_files`](#ignore_files)
+* [`mode`](#mode)
+* [`verbose`](#verbose)
+
+##### <a name="enable"></a>`enable`
 
 Data type: `Boolean`
 
@@ -52,7 +59,7 @@ Enable svckill on the system
 
 Default value: ``true``
 
-##### `ignore`
+##### <a name="ignore"></a>`ignore`
 
 Data type: `Array[String]`
 
@@ -60,7 +67,7 @@ A list of services to never kill
 
 Default value: `[]`
 
-##### `ignore_defaults`
+##### <a name="ignore_defaults"></a>`ignore_defaults`
 
 Data type: `Array[String]`
 
@@ -68,7 +75,7 @@ An internal list of embedded services to never kill
 
 Default value: `[]`
 
-##### `ignore_files`
+##### <a name="ignore_files"></a>`ignore_files`
 
 Data type: `Array[Stdlib::Absolutepath]`
 
@@ -81,7 +88,7 @@ A list of files that contain services to never kill, one per line
 
 Default value: `[]`
 
-##### `mode`
+##### <a name="mode"></a>`mode`
 
 Data type: `Enum['enforcing','warning']`
 
@@ -96,7 +103,7 @@ The strategy svckill should use when it encounters undeclared services.
 
 Default value: `'warning'`
 
-##### `verbose`
+##### <a name="verbose"></a>`verbose`
 
 Data type: `Boolean`
 
@@ -107,15 +114,17 @@ Report on exactly what ``svckill`` attempted to kill
 
 Default value: ``true``
 
-### `svckill::ignore::collector`
+### <a name="svckillignorecollector"></a>`svckill::ignore::collector`
 
 Build the default ignore file used by the ``svckill::ignore`` define.
 
 #### Parameters
 
-The following parameters are available in the `svckill::ignore::collector` class.
+The following parameters are available in the `svckill::ignore::collector` class:
 
-##### `default_ignore_file`
+* [`default_ignore_file`](#default_ignore_file)
+
+##### <a name="default_ignore_file"></a>`default_ignore_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -125,15 +134,17 @@ Default value: `'/usr/local/etc/svckill.ignore'`
 
 ## Defined types
 
-### `svckill::ignore`
+### <a name="svckillignore"></a>`svckill::ignore`
 
 Ensure that service ``$name`` will not be killed by svckill
 
 #### Parameters
 
-The following parameters are available in the `svckill::ignore` defined type.
+The following parameters are available in the `svckill::ignore` defined type:
 
-##### `name`
+* [`name`](#name)
+
+##### <a name="name"></a>`name`
 
 Data type: `String`
 
@@ -141,52 +152,15 @@ The name of the service to prevent being killed
 
 ## Resource types
 
-### `svckill`
+### <a name="svckill"></a>`svckill`
 
 Disables all services (recognized by the 'service' resource)
- that are not defined in your Puppet manifests or listed.
+that are not defined in your Puppet manifests or listed.
 
- Any services listed in the $ignorefiles array will be ignored
- for legacy compatibility.
+Any services listed in the $ignorefiles array will be ignored
+for legacy compatibility.
 
- The following services are hard coded to never be killed by svckill:
-   * amtu
-   * blk-availability
-   * crond
-   * ebtables
-   * gpm
-   * haldaemon
-   * ip6tables
-   * iptables
-   * irqbalance
-   * killall
-   * libvirt-guests
-   * lvm2-monitor
-   * mcstrans
-   * mdmonitor
-   * messagebus
-   * netcf-transaction
-   * netfs
-   * netlabel
-   * network
-   * ntpdate
-   * portreserve
-   * puppet
-   * restorecond
-   * sandbox
-   * sshd
-   * sysstat
-   * udev-post
-   * getty*
-   * dbus*
-
-These are here because their status function is broken
-   * krb524
-   * mdmpd
-   * readahead_later
-   * rawdevices
-   * lm_sensors
-   * kudzu
+See the module data to determine what services are ignored by default.
 
 #### Properties
 
@@ -208,18 +182,24 @@ Default value: `warning`
 
 The following parameters are available in the `svckill` type.
 
-##### `ignore`
+* [`ignore`](#ignore)
+* [`ignorefiles`](#ignorefiles)
+* [`name`](#name)
+* [`provider`](#provider)
+* [`verbose`](#verbose)
+
+##### <a name="ignore"></a>`ignore`
 
 An array of services to never kill. Can also accept a regex.
 
-##### `ignorefiles`
+##### <a name="ignorefiles"></a>`ignorefiles`
 
 An array of files containing a list of services to ignore, one per line.
 Can also accept regexes in the file.
 
 Default value: `/usr/local/etc/svckill.ignore`
 
-##### `name`
+##### <a name="name"></a>`name`
 
 namevar
 
@@ -228,12 +208,12 @@ this type of resource once in your node scope.
 
 Default value: `svckill`
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `svckill` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
-##### `verbose`
+##### <a name="verbose"></a>`verbose`
 
 Valid values: ``true``, ``false``
 

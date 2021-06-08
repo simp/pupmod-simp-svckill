@@ -6,44 +6,7 @@ Puppet::Type.newtype(:svckill) do
     Any services listed in the $ignorefiles array will be ignored
     for legacy compatibility.
 
-    The following services are hard coded to never be killed by svckill:
-      * amtu
-      * blk-availability
-      * crond
-      * ebtables
-      * gpm
-      * haldaemon
-      * ip6tables
-      * iptables
-      * irqbalance
-      * killall
-      * libvirt-guests
-      * lvm2-monitor
-      * mcstrans
-      * mdmonitor
-      * messagebus
-      * netcf-transaction
-      * netfs
-      * netlabel
-      * network
-      * ntpdate
-      * portreserve
-      * puppet
-      * restorecond
-      * sandbox
-      * sshd
-      * sysstat
-      * udev-post
-      * getty*
-      * dbus*
-
-   These are here because their status function is broken
-      * krb524
-      * mdmpd
-      * readahead_later
-      * rawdevices
-      * lm_sensors
-      * kudzu
+    See the module data to determine what services are ignored by default.
   EOM
 
   newparam(:name) do

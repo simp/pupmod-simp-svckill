@@ -7,8 +7,8 @@ describe 'svckill' do
       context "on #{os}" do
         let(:facts) { os_facts.merge({:virtual => 'kvm' })}
 
-        let(:common_list_without_sshd) { [ "auditd", "puppet", "puppetmaster", "crond", "^pe-.*", "simp_client_bootstrap"] }
-        let(:common_list) { [ "auditd", "puppet", "puppetmaster", "crond", "sshd",  "^pe-.*", "simp_client_bootstrap"] }
+        let(:common_list) { [ "auditd", "crond", "puppet", "puppetmaster", "rngd", "sshd", "^pe-.*", "simp_client_bootstrap"] }
+        let(:common_list_without_sshd) { common_list - ['sshd'] }
         let(:kvm_virtual_list) { [ "ovirt-guest-agent", "qemu-guest-agent"] }
         let(:vmware_virtual_list) { [ "vmtoolsd"] }
         let(:redhat_family_list) { [ "dbus.*", "getty.*", "irqbalance","gpm", "messagebus", "libvirt-guests", "blk-availability","lvm2-lvmetad", "lvm2-lvmpolld", "lvm2-monitor", "mdmonitor", "mcstrans", "ntpdate", "netcf-transaction", "netlabel", "portreserve", "restorecond", "sysstat", "prefdm", "krb524", "mdmpd", "readahead_later", "lm_sensors"] }
@@ -48,7 +48,7 @@ describe 'svckill' do
             end
             is_expected.to create_svckill('svckill').with({
               :mode => 'warning',
-              :ignore => expected_ignore_list,
+              :ignore => expected_ignore_list
             })
           }
 

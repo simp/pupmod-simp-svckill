@@ -1,3 +1,8 @@
+* Tue Jun 08 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.3
+- Fixed
+  - Added 'rngd' to the default services to never be killed
+  - Removed obsolete documentation
+
 * Sat Dec 19 2020 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.6.2
 - Removed EL6 support
 
