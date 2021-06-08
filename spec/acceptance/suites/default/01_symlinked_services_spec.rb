@@ -5,10 +5,6 @@ test_name 'svckill'
 
 describe 'not kill services which are symlinked to other services' do
   hosts.each do |host|
-    # This issue only exists on systemd systems
-    os_result = fact_on(host, 'os')
-    next if os_result['release']['major'] == '6'
-
     context 'nfs and nfs-server' do
       let(:manifest) {
         <<-EOF
@@ -66,8 +62,7 @@ describe 'not kill services which are symlinked to other services' do
       }
 
       it 'should set up an essential service' do
-        facts = JSON.load(on(host, 'puppet facts').stdout)
-        if facts['values']['os']['name'] == 'OracleLinux'
+        if fact_on(host, 'os.name') == 'OracleLinux'
           skip("FIXME: Test can't be run on OracleLinux because it requires physical input at console")
         else
           # dnsmasq is sometimes still running and triggers svckill
@@ -89,8 +84,7 @@ describe 'not kill services which are symlinked to other services' do
       end
 
       it 'should run puppet and not kill the application' do
-        facts = JSON.load(on(host, 'puppet facts').stdout)
-        if facts['values']['os']['name'] == 'OracleLinux'
+        if fact_on(host, 'os.name') == 'OracleLinux'
           skip("FIXME: Test can't be run on OracleLinux because it requires physical input at console")
         else
           result = apply_manifest_on(host, manifest, :catch_failures => true).stdout
@@ -99,7 +93,6 @@ describe 'not kill services which are symlinked to other services' do
           expect(result).to_not match(/stopped.*'display-manager/)
         end
       end
-
     end
   end
 end
