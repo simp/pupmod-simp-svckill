@@ -1,9 +1,9 @@
 ---
 fixtures:
   repositories:
-    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup
-    concat: https://github.com/simp/puppetlabs-concat
-    simplib: https://github.com/simp/pupmod-simp-simplib
-    stdlib: https://github.com/simp/puppetlabs-stdlib
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
+    concat: https://github.com/simp/puppetlabs-concat.git
+    simplib: https://github.com/simp/pupmod-simp-simplib.git
+    stdlib: https://github.com/simp/puppetlabs-stdlib.git
   symlinks:
     svckill: "#{source_dir}"
