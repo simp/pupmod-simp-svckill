@@ -1,3 +1,7 @@
+* Thu Jun 17 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.8.0
+- Removed support for Puppet 5
+- Ensured support for Puppet 7 in requirements and stdlib
+
 * Tue Jun 08 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.7.0
 - Fixed
   - Added 'rngd' to the default services to never be killed
