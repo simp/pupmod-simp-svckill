@@ -7,11 +7,11 @@
 ### Classes
 
 * [`svckill`](#svckill): Svckill is a system that attempts to run with the security best practice that "No unnecessary services should be running on the system."  The
-* [`svckill::ignore::collector`](#svckillignorecollector): Build the default ignore file used by the ``svckill::ignore`` define.
+* [`svckill::ignore::collector`](#svckill--ignore--collector): Build the default ignore file used by the ``svckill::ignore`` define.
 
 ### Defined types
 
-* [`svckill::ignore`](#svckillignore): Ensure that service ``$name`` will not be killed by svckill
+* [`svckill::ignore`](#svckill--ignore): Ensure that service ``$name`` will not be killed by svckill
 
 ### Resource types
 
@@ -44,22 +44,22 @@ svckill::ignore:
 
 The following parameters are available in the `svckill` class:
 
-* [`enable`](#enable)
-* [`ignore`](#ignore)
-* [`ignore_defaults`](#ignore_defaults)
-* [`ignore_files`](#ignore_files)
-* [`mode`](#mode)
-* [`verbose`](#verbose)
+* [`enable`](#-svckill--enable)
+* [`ignore`](#-svckill--ignore)
+* [`ignore_defaults`](#-svckill--ignore_defaults)
+* [`ignore_files`](#-svckill--ignore_files)
+* [`mode`](#-svckill--mode)
+* [`verbose`](#-svckill--verbose)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-svckill--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Enable svckill on the system
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="ignore"></a>`ignore`
+##### <a name="-svckill--ignore"></a>`ignore`
 
 Data type: `Array[String]`
 
@@ -67,7 +67,7 @@ A list of services to never kill
 
 Default value: `[]`
 
-##### <a name="ignore_defaults"></a>`ignore_defaults`
+##### <a name="-svckill--ignore_defaults"></a>`ignore_defaults`
 
 Data type: `Array[String]`
 
@@ -75,7 +75,7 @@ An internal list of embedded services to never kill
 
 Default value: `[]`
 
-##### <a name="ignore_files"></a>`ignore_files`
+##### <a name="-svckill--ignore_files"></a>`ignore_files`
 
 Data type: `Array[Stdlib::Absolutepath]`
 
@@ -88,7 +88,7 @@ A list of files that contain services to never kill, one per line
 
 Default value: `[]`
 
-##### <a name="mode"></a>`mode`
+##### <a name="-svckill--mode"></a>`mode`
 
 Data type: `Enum['enforcing','warning']`
 
@@ -103,7 +103,7 @@ The strategy svckill should use when it encounters undeclared services.
 
 Default value: `'warning'`
 
-##### <a name="verbose"></a>`verbose`
+##### <a name="-svckill--verbose"></a>`verbose`
 
 Data type: `Boolean`
 
@@ -112,9 +112,9 @@ Report on exactly what ``svckill`` attempted to kill
 * If ``false``, it will only report on the number of services that it
   attempted to kill
 
-Default value: ``true``
+Default value: `true`
 
-### <a name="svckillignorecollector"></a>`svckill::ignore::collector`
+### <a name="svckill--ignore--collector"></a>`svckill::ignore::collector`
 
 Build the default ignore file used by the ``svckill::ignore`` define.
 
@@ -122,9 +122,9 @@ Build the default ignore file used by the ``svckill::ignore`` define.
 
 The following parameters are available in the `svckill::ignore::collector` class:
 
-* [`default_ignore_file`](#default_ignore_file)
+* [`default_ignore_file`](#-svckill--ignore--collector--default_ignore_file)
 
-##### <a name="default_ignore_file"></a>`default_ignore_file`
+##### <a name="-svckill--ignore--collector--default_ignore_file"></a>`default_ignore_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -134,7 +134,7 @@ Default value: `'/usr/local/etc/svckill.ignore'`
 
 ## Defined types
 
-### <a name="svckillignore"></a>`svckill::ignore`
+### <a name="svckill--ignore"></a>`svckill::ignore`
 
 Ensure that service ``$name`` will not be killed by svckill
 
@@ -142,9 +142,9 @@ Ensure that service ``$name`` will not be killed by svckill
 
 The following parameters are available in the `svckill::ignore` defined type:
 
-* [`name`](#name)
+* [`name`](#-svckill--ignore--name)
 
-##### <a name="name"></a>`name`
+##### <a name="-svckill--ignore--name"></a>`name`
 
 Data type: `String`
 
@@ -182,24 +182,24 @@ Default value: `warning`
 
 The following parameters are available in the `svckill` type.
 
-* [`ignore`](#ignore)
-* [`ignorefiles`](#ignorefiles)
-* [`name`](#name)
-* [`provider`](#provider)
-* [`verbose`](#verbose)
+* [`ignore`](#-svckill--ignore)
+* [`ignorefiles`](#-svckill--ignorefiles)
+* [`name`](#-svckill--name)
+* [`provider`](#-svckill--provider)
+* [`verbose`](#-svckill--verbose)
 
-##### <a name="ignore"></a>`ignore`
+##### <a name="-svckill--ignore"></a>`ignore`
 
 An array of services to never kill. Can also accept a regex.
 
-##### <a name="ignorefiles"></a>`ignorefiles`
+##### <a name="-svckill--ignorefiles"></a>`ignorefiles`
 
 An array of files containing a list of services to ignore, one per line.
 Can also accept regexes in the file.
 
 Default value: `/usr/local/etc/svckill.ignore`
 
-##### <a name="name"></a>`name`
+##### <a name="-svckill--name"></a>`name`
 
 namevar
 
@@ -208,16 +208,16 @@ this type of resource once in your node scope.
 
 Default value: `svckill`
 
-##### <a name="provider"></a>`provider`
+##### <a name="-svckill--provider"></a>`provider`
 
 The specific backend to use for this `svckill` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
-##### <a name="verbose"></a>`verbose`
+##### <a name="-svckill--verbose"></a>`verbose`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 If set, output all services that were affected by svckill.
 
-Default value: ``true``
+Default value: `true`
 
