@@ -38,13 +38,10 @@ describe 'svckill' do
             else
               extra_list = []
             end
-            case facts[:os][:release][:major]
-            when "8"
+            if facts[:os][:release][:major].to_i >= 8
               expected_ignore_list = redhat_8_list + redhat_family_list + extra_list + kvm_virtual_list + common_list
-            when "7"
-              expected_ignore_list = redhat_7_list + redhat_family_list + extra_list + kvm_virtual_list + common_list
             else
-              expected_ignore_list = redhat_6_list + redhat_family_list + extra_list + kvm_virtual_list + common_list
+              expected_ignore_list = redhat_7_list + redhat_family_list + extra_list + kvm_virtual_list + common_list
             end
             is_expected.to create_svckill('svckill').with({
               :mode => 'warning',
@@ -72,13 +69,10 @@ describe 'svckill' do
             else
               extra_list = []
             end
-            case facts[:os][:release][:major]
-            when "8"
+            if facts[:os][:release][:major].to_i >= 8
               expected_ignore_list = redhat_8_list + redhat_family_list + extra_list +  common_list_without_sshd
-            when "7"
-              expected_ignore_list = redhat_7_list + redhat_family_list + extra_list +  common_list_without_sshd
             else
-              expected_ignore_list = redhat_6_list + redhat_family_list + extra_list +  common_list_without_sshd
+              expected_ignore_list = redhat_7_list + redhat_family_list + extra_list +  common_list_without_sshd
             end
             is_expected.to create_svckill('svckill').with({
               :mode => 'warning',
