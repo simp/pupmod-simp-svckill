@@ -23,7 +23,7 @@ describe 'svckill' do
           # process.  So, to prevent systemctl commands from being
           # called by the svckill provider, mock the method the
           # provider uses to determine if systemctl is available.
-          Puppet::Util.stubs(:which).with('systemctl').returns(nil)
+          allow(Puppet::Util).to receive(:which).with('systemctl').and_return(nil)
         end
 
         context "with default parameters on major release #{os_facts[:os][:release][:major]}" do
