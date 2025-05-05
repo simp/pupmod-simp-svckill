@@ -35,7 +35,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
       end
 
       # Service units cannot always be found. Skip them if they can't.
-    rescue Exception => e
+    rescue => e
       Puppet.debug("svckill: #{e.message}")
       next
     end
@@ -44,9 +44,9 @@ Puppet::Type.type(:svckill).provide(:kill) do
   end
 
   def mode
-    all_services = @resource.catalog.resources.select { |r|
-      r.is_a?(Puppet::Type.type(:service))
-    }.map { |x| x[:name] }
+    all_services = @resource.catalog.resources
+                            .select { |r| r.is_a?(Puppet::Type.type(:service)) }
+                            .map { |x| x[:name] }
 
     # Gather all items to ignore together
     if @resource[:ignore]
@@ -60,17 +60,17 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
     Array(@resource[:ignorefiles]).each do |ignorefile|
       if ignorefile && File.readable?(ignorefile)
-        _ignorefile_list = File.readlines(ignorefile).map { |x| x.strip }
-        _ignorefile_list.reject! { |x| x =~ %r{^#} }
-        ignore += _ignorefile_list
+        ignorefile_list = File.readlines(ignorefile).map { |x| x.strip }
+        ignorefile_list.reject! { |x| x =~ %r{^#} }
+        ignore += ignorefile_list
         Puppet.debug(
           "svckill: ignore list from `:ignorefile` '#{ignorefile}' " \
-          "(#{_ignorefile_list.size} entries):\n" +
-          _ignorefile_list.map { |x| "  - '#{x}'" }.join("\n").to_s,
+          "(#{ignorefile_list.size} entries):\n" +
+          ignorefile_list.map { |x| "  - '#{x}'" }.join("\n").to_s,
         )
 
       end
-    rescue Exception => e
+    rescue => e
       Puppet.warning("svckill: Could not read svckill ignore file '#{ignorefile}', skipping: #{e}")
       next
     end

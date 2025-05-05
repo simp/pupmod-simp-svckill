@@ -19,11 +19,12 @@ describe 'svckill' do
         let(:redhat_6_list) { ['amtu', 'haldaemon', 'udev-post', 'netfs', 'sandbox', 'killall', 'iptables', 'ip6tables', 'ebtables', 'network', 'NetworkManager', 'rc' ] }
         let(:redhat_7_list) do
           ['goferd', 'iptables', 'ip6tables', 'ebtables', 'firewalld', 'nftables', 'NetworkManager', 'NetworkManager-dispatcher', 'NetworkManager-wait-online', 'network', 'rc', '^systemd-nspawn@.*',
-           'systemd-bootchart', 'systemd-readahead-collect', 'systemd-readahead-drop', 'systemd-readahead-replay', 'microcode', 'kdump', 'rsyslog', 'rhel-autorelabel-mark', 'rhel-autorelabel', 'rhel-configure', 'rhel-dmesg', 'rhel-import-state', 'rhel-loadmodules', 'rhel-readonly', 'selinuxfsrelabel', '^autovt@.*', 'sandbox']
+           'systemd-bootchart', 'systemd-readahead-collect', 'systemd-readahead-drop', 'systemd-readahead-replay', 'microcode', 'kdump', 'rsyslog', 'rhel-autorelabel-mark', 'rhel-autorelabel',
+           'rhel-configure', 'rhel-dmesg', 'rhel-import-state', 'rhel-loadmodules', 'rhel-readonly', 'selinuxfsrelabel', '^autovt@.*', 'sandbox']
         end
         let(:redhat_8_list) do
-          [ 'chronyd', 'rndg', 'firewalld', 'nftables', 'ebtables', 'NetworkManager', 'NetworkManager-dispatcher', 'NetworkManager-wait-online', '^systemd-nspawn@.*', 'microcode', 'loadmodules', 'kdump',
-            'rsyslog', 'selinux-autorelabel-mark', 'timedatex', '^autovt@.*']
+          ['chronyd', 'rndg', 'firewalld', 'nftables', 'ebtables', 'NetworkManager', 'NetworkManager-dispatcher', 'NetworkManager-wait-online', '^systemd-nspawn@.*', 'microcode', 'loadmodules',
+           'kdump', 'rsyslog', 'selinux-autorelabel-mark', 'timedatex', '^autovt@.*']
         end
 
         before :each do

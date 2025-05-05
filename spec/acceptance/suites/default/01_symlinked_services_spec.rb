@@ -38,7 +38,7 @@ describe 'not kill services which are symlinked to other services' do
         result = apply_manifest_on(host, manifest, catch_failures: true).stdout
         if ENV.fetch('BEAKER_pry', '').chomp == 'svckill'
           (require 'pry'
-           binding.pry)
+           binding.pry) # rubocop:disable Lint/Debugger
         end
 
         # In el7, nfs.service is an alias of nfs-server.service and should not be
@@ -89,7 +89,7 @@ describe 'not kill services which are symlinked to other services' do
           result = apply_manifest_on(host, manifest, catch_failures: true).stdout
           if ENV.fetch('BEAKER_pry', '').chomp == 'svckill'
             (require 'pry'
-             binding.pry)
+             binding.pry) # rubocop:disable Lint/Debugger
           end
           expect(result).not_to match(%r{stopped.*'gdm})
           expect(result).not_to match(%r{stopped.*'display-manager})
