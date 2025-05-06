@@ -20,7 +20,7 @@ Puppet::Type.newtype(:svckill) do
     defaultto 'svckill'
 
     validate do |value|
-      raise(ArgumentError,"Error: $name must be 'svckill'.") unless value == 'svckill'
+      raise(ArgumentError, "Error: $name must be 'svckill'.") unless value == 'svckill'
     end
   end
 
@@ -39,7 +39,7 @@ Puppet::Type.newtype(:svckill) do
     defaultto '/usr/local/etc/svckill.ignore'
   end
 
-  newparam(:verbose, :boolean => true) do
+  newparam(:verbose, boolean: true) do
     desc <<-EOM
       If set, output all services that were affected by svckill.
     EOM
@@ -62,8 +62,8 @@ Puppet::Type.newtype(:svckill) do
     defaultto 'warning'
 
     validate do |value|
-      unless ['enforcing','warning'].include?("#{value}")
-        raise(ArgumentError,"'ensure' must be either 'enforcing' or 'warning'")
+      unless ['enforcing', 'warning'].include?(value.to_s)
+        raise(ArgumentError, "'ensure' must be either 'enforcing' or 'warning'")
       end
     end
 
@@ -71,7 +71,7 @@ Puppet::Type.newtype(:svckill) do
       provider.insync?(is)
     end
 
-    def change_to_s(currentvalue, newvalue)
+    def change_to_s(_currentvalue, _newvalue)
       results = provider.results
 
       output = []
@@ -80,13 +80,13 @@ Puppet::Type.newtype(:svckill) do
       if @resource[:verbose] == :true
         # Ensure that our list of things that svckill is affecting begins on a
         # new line for readability
-        output << ""
+        output << ''
 
         unless results[:stopped][:passed].empty?
-          output << results[:stopped][:passed].map{|x| x = "Svckill stopped '#{x}'"}.join("\n")
+          output << results[:stopped][:passed].map { |x| "Svckill stopped '#{x}'" }.join("\n")
         end
         unless results[:disabled][:passed].empty?
-          output << results[:disabled][:passed].map{|x| x = "Svckill disabled '#{x}'"}.join("\n")
+          output << results[:disabled][:passed].map { |x| "Svckill disabled '#{x}'" }.join("\n")
         end
       else
         unless results[:stopped][:passed].empty?
@@ -98,12 +98,12 @@ Puppet::Type.newtype(:svckill) do
       end
 
       unless results[:stopped][:failed].empty?
-        err_output << results[:stopped][:failed].map{|x| x = "Svckill failed to stop '#{x}'"}.join("\n")
+        err_output << results[:stopped][:failed].map { |x| "Svckill failed to stop '#{x}'" }.join("\n")
       end
 
       unless results[:disabled][:failed].empty?
         err_output << 'Failed to disable the following services:'
-        err_output << results[:disabled][:failed].map{|x| x = "Svckill failed to disable '#{x}'"}.join("\n")
+        err_output << results[:disabled][:failed].map { |x| "Svckill failed to disable '#{x}'" }.join("\n")
       end
 
       unless err_output.empty?

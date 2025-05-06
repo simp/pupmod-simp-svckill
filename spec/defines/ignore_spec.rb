@@ -10,7 +10,7 @@ describe 'svckill::ignore' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat__fragment("svckill_ignore_#{title}") }
-        it { is_expected.to_not create_svckill('svckill') }
+        it { is_expected.not_to create_svckill('svckill') }
       end
     end
   end

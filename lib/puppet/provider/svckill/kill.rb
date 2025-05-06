@@ -3,83 +3,76 @@ Puppet::Type.type(:svckill).provide(:kill) do
     Stop and disable services that are not present in the puppet catalog or an ignore list.
   DESC
 
-
   def initialize(*args)
-    super(*args)
+    super
 
     @systemctl = Puppet::Util.which('systemctl')
     # Put together a lookup table for all systemd services that have aliases.
     # This is so that we can prevent nuking a service accidentally by targeting
     # its alias.
-    if @systemctl
-      @systemd_aliases = []
+    return unless @systemctl
+    @systemd_aliases = []
 
-      active_services = Set.new
+    active_services = Set.new
 
-      %x{#{@systemctl} list-unit-files -t service}.split("\n").each do |x|
-        if x =~ /\.service/
-          service,state = x.split(/\s+/)
-          state.strip!
+    `#{@systemctl} list-unit-files -t service`.split("\n").each do |x|
+      next unless x.include?('.service')
+      service, state = x.split(%r{\s+})
+      state.strip!
 
-          next if state == 'static'
-          next if service.include?('@')
+      next if state == 'static'
+      next if service.include?('@')
 
-          active_services << service.strip
-        end
-      end
-
-      active_services.each do |svc|
-        begin
-          # Collect all active service names and aliases
-          svc_entries = (%x{#{@systemctl} show -p Names #{svc}}).split('=').last.split(/\s+/)
-          # If name returns more than one service entry, the service has an alias
-          if svc_entries.count > 1
-            @systemd_aliases << svc_entries
-          end
-
-        # Service units cannot always be found. Skip them if they can't.
-        rescue Exception => e
-          Puppet.debug("svckill: #{e.message}")
-          next
-        end
-      end
-      @systemd_aliases.flatten!
-      @systemd_aliases.uniq!
+      active_services << service.strip
     end
+
+    active_services.each do |svc|
+      # Collect all active service names and aliases
+      svc_entries = `#{@systemctl} show -p Names #{svc}`.split('=').last.split(%r{\s+})
+      # If name returns more than one service entry, the service has an alias
+      if svc_entries.count > 1
+        @systemd_aliases << svc_entries
+      end
+
+      # Service units cannot always be found. Skip them if they can't.
+    rescue => e
+      Puppet.debug("svckill: #{e.message}")
+      next
+    end
+    @systemd_aliases.flatten!
+    @systemd_aliases.uniq!
   end
 
   def mode
-    all_services = @resource.catalog.resources.find_all{|r|
-      r.is_a?(Puppet::Type.type(:service))
-    }.map{ |x| x = x[:name] }
+    all_services = @resource.catalog.resources
+                            .select { |r| r.is_a?(Puppet::Type.type(:service)) }
+                            .map { |x| x[:name] }
 
     # Gather all items to ignore together
     if @resource[:ignore]
-      ignore = Array(@resource[:ignore]).collect{|x| x = x.strip}
+      ignore = Array(@resource[:ignore]).map { |x| x.strip }
       Puppet.debug(
-        'svckill: ignore list from `:ignore` ' +
+        'svckill: ignore list from `:ignore` ' \
         "(#{@resource[:ignore].size} entries):\n" +
-        %Q[#{@resource[:ignore].map{|x| "  - '#{x}'"}.join("\n")}]
+        @resource[:ignore].map { |x| "  - '#{x}'" }.join("\n").to_s,
       )
     end
 
     Array(@resource[:ignorefiles]).each do |ignorefile|
-      begin
-        if ignorefile && File.readable?(ignorefile)
-          _ignorefile_list = File.readlines(ignorefile).collect{|x| x = x.strip}
-          _ignorefile_list.reject!{|x| x =~ /^#/}
-          ignore += _ignorefile_list
-          Puppet.debug(
-            "svckill: ignore list from `:ignorefile` '#{ignorefile}' " +
-            "(#{_ignorefile_list.size} entries):\n" +
-            %Q[#{_ignorefile_list.map{|x| "  - '#{x}'"}.join("\n")}]
-          )
+      if ignorefile && File.readable?(ignorefile)
+        ignorefile_list = File.readlines(ignorefile).map { |x| x.strip }
+        ignorefile_list.reject! { |x| x =~ %r{^#} }
+        ignore += ignorefile_list
+        Puppet.debug(
+          "svckill: ignore list from `:ignorefile` '#{ignorefile}' " \
+          "(#{ignorefile_list.size} entries):\n" +
+          ignorefile_list.map { |x| "  - '#{x}'" }.join("\n").to_s,
+        )
 
-        end
-      rescue Exception => e
-        Puppet.warning("svckill: Could not read svckill ignore file '#{ignorefile}', skipping: #{e}")
-        next
       end
+    rescue => e
+      Puppet.warning("svckill: Could not read svckill ignore file '#{ignorefile}', skipping: #{e}")
+      next
     end
 
     # Try to make this smart enough to only prod those items that are
@@ -92,7 +85,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
       if Facter.value(:os)['family'] == 'RedHat'
         # Skip anything that is a leftover from RPM
-        if obj_name =~ /\.rpm(save|new)$/
+        if %r{\.rpm(save|new)$}.match?(obj_name)
           Puppet.debug("svckill: Ignoring '#{obj_name}' due to being an RPM leftover")
           next
         end
@@ -100,7 +93,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
       # This command is what actually checks the service on the
       # Skip anything that we're supposed to ignore
-      if ignore.index{|x| Regexp.new("^#{x}$").match(obj_name) }
+      if ignore.index { |x| Regexp.new("^#{x}$").match(obj_name) }
         Puppet.debug("svckill: Ignoring '#{obj_name}' due to ignore list")
         next
       end
@@ -118,11 +111,10 @@ Puppet::Type.type(:svckill).provide(:kill) do
         found = false
         @systemd_aliases.each do |aliased_svc|
           # And, of course, we have to check for both forms again....
-          if all_services.include?(aliased_svc) || all_services.include?(aliased_svc.split('.service').first)
-            Puppet.debug("svckill: Ignoring #{aliased_svc} due to being in the catalog")
-            found = true
-            break
-          end
+          next unless all_services.include?(aliased_svc) || all_services.include?(aliased_svc.split('.service').first)
+          Puppet.debug("svckill: Ignoring #{aliased_svc} due to being in the catalog")
+          found = true
+          break
         end
 
         next if found
@@ -142,10 +134,10 @@ Puppet::Type.type(:svckill).provide(:kill) do
         if res[:ensure].eql?(:running)
           @running_services[obj[:name]] = obj.provider
         end
-      elsif [:redhat,:systemd].include?(res[:provider])
-        if res[:enable].to_s.eql?("true") || res[:ensure].eql?(:running)
+      elsif [:redhat, :systemd].include?(res[:provider])
+        if res[:enable].to_s.eql?('true') || res[:ensure].eql?(:running)
           add_service = false
-          if  !obj.provider.respond_to?(:cached_enabled?)
+          if !obj.provider.respond_to?(:cached_enabled?)
             #  If the service is not systemd it will not respond to cached_enabled and it is ok to
             #  add it.
             add_service = true
@@ -161,8 +153,8 @@ Puppet::Type.type(:svckill).provide(:kill) do
           end
           if add_service
             @running_services[obj[:name]] = {
-              :provider => obj.provider,
-              :resource => res
+              provider: obj.provider,
+              resource: res
             }
           else
             Puppet.debug("svckill: Ignoring  #{obj[:name]} because it is not enabled|disabled")
@@ -172,13 +164,13 @@ Puppet::Type.type(:svckill).provide(:kill) do
         Puppet.warning("The svckill provider does not yet support service provider type #{res[:provider]} for service #{obj_name}")
       end
     end
-    return @running_services
+    @running_services
   end
 
-  def insync?(is)
+  def insync?(_is)
     if Puppet[:noop] || @resource[:mode] == 'warning'
       if @running_services.nil? || @running_services.empty?
-        Puppet.debug("svckill: Would not have killed any services.")
+        Puppet.debug('svckill: Would not have killed any services.')
       else
         Puppet.warning("svckill: Would have killed:\n  svckill: #{@running_services.keys.join("\n  svckill: ")}")
       end
@@ -186,18 +178,18 @@ Puppet::Type.type(:svckill).provide(:kill) do
       return true
     end
 
-    return @running_services.nil? || @running_services.empty?
+    @running_services.nil? || @running_services.empty?
   end
 
-  def mode=(should)
+  def mode=(_should)
     @results = {
-      :stopped => {
-        :passed => [],
-        :failed => []
+      stopped: {
+        passed: [],
+        failed: []
       },
-      :disabled => {
-        :passed => [],
-        :failed => []
+      disabled: {
+        passed: [],
+        failed: []
       }
     }
 
@@ -207,7 +199,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
       if @running_services[svc][:resource][:ensure].eql?(:running)
         begin
           @running_services[svc][:provider].send 'stop'
-        rescue Puppet::Error => e
+        rescue Puppet::Error
           @results[:stopped][:failed] << svc
         else
           @results[:stopped][:passed] << svc
@@ -217,7 +209,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
       if @running_services[svc][:resource][:enable].to_s.eql?('true')
         begin
           @running_services[svc][:provider].send 'disable'
-        rescue Puppet::Error => e
+        rescue Puppet::Error
           @results[:disabled][:failed] << svc
         else
           @results[:disabled][:passed] << svc
@@ -237,7 +229,5 @@ Puppet::Type.type(:svckill).provide(:kill) do
     @running_services = nil
   end
 
-  def results
-    return @results
-  end
+  attr_reader :results
 end
