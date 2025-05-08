@@ -1,6 +1,6 @@
 {
   "name": "simp-svckill",
-  "version": "3.12.0",
+  "version": "4.0.0",
   "author": "SIMP Team",
   "summary": "Disables all services that are not controlled by Puppet.",
   "license": "Apache-2.0",
@@ -29,15 +29,12 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8",
         "9"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
         "8",
         "9"
       ]
@@ -45,7 +42,6 @@
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
         "8",
         "9"
       ]
