@@ -45,7 +45,7 @@ Puppet::Type.type(:svckill).provide(:kill) do
 
   def mode
     all_services = @resource.catalog.resources
-                            .select { |r| r.is_a?(Puppet::Type.type(:service)) }
+                            .grep(Puppet::Type.type(:service))
                             .map { |x| x[:name] }
 
     # Gather all items to ignore together
