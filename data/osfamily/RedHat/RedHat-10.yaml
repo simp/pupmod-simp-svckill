@@ -1,0 +1,18 @@
+---
+svckill::ignore_defaults:
+  - chronyd
+  - rndg
+  - firewalld
+  - nftables
+  - ebtables
+  - NetworkManager
+  - NetworkManager-dispatcher
+  - NetworkManager-wait-online
+  - ^systemd-nspawn@.*
+  - microcode
+  - loadmodules
+  - kdump
+  - rsyslog
+  - selinux-autorelabel-mark
+  - timedatex
+  - ^autovt@.*
