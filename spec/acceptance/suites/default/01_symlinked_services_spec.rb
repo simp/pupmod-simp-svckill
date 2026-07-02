@@ -68,10 +68,15 @@ describe 'not kill services which are symlinked to other services' do
         else
           # dnsmasq is sometimes still running and triggers svckill
           on(host, 'puppet resource service dnsmasq ensure=stopped')
-          install_cmd = if fact_on(host, 'os.release.major').to_i < 8
+          os_major = fact_on(host, 'os.release.major').to_i
+          install_cmd = if os_major < 8
                           'yum install -y @x11 gdm gnome-shell gnome-session-xsession'
-                        else
+                        elsif os_major < 10
                           'dnf install -y @base-x gdm gnome-shell gnome-session-xsession'
+                        else
+                          # EL10 dropped the X11 session (gnome-session-xsession);
+                          # GNOME runs on Wayland only
+                          'dnf install -y gdm gnome-shell gnome-session-wayland-session'
                         end
 
           on(host, install_cmd)
