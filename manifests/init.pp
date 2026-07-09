@@ -59,12 +59,12 @@ class svckill (
   Array[Stdlib::Absolutepath] $ignore_files    = [],
   Enum['enforcing','warning'] $mode            = 'warning',
   Boolean                     $verbose         = true,
-){
+) {
   if $enable {
-    include '::svckill::ignore::collector'
+    include 'svckill::ignore::collector'
 
     $combined_ignore_list = $ignore + $ignore_defaults
-    $flattened_ignore_files = flatten([$ignore_files, $::svckill::ignore::collector::default_ignore_file])
+    $flattened_ignore_files = flatten([$ignore_files, $svckill::ignore::collector::default_ignore_file])
 
     svckill { 'svckill':
       ignore      => simplib::knockout($combined_ignore_list),

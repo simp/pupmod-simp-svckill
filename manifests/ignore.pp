@@ -6,10 +6,10 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define svckill::ignore {
-  include '::svckill::ignore::collector'
+  include 'svckill::ignore::collector'
 
   ensure_resource('concat::fragment', "svckill_ignore_${name}", {
-    'target'  => $::svckill::ignore::collector::default_ignore_file,
+    'target'  => $svckill::ignore::collector::default_ignore_file,
     'content' => $name
   })
 }
