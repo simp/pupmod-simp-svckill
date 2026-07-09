@@ -6,7 +6,7 @@ This file provides guidance to AI agents when working with code in this reposito
 
 `simp-svckill` is a SIMP Puppet module that enforces the security best practice
 that **"no unnecessary services should be running on the system."** It is a
-service *reaper*: it enumerates every service the system knows about and stops +
+service *reaper*: it enumerates every service the system knows about and stops
 disables any that are **not** declared in the Puppet catalog and **not** on an
 explicit ignore list (`manifests/init.pp`,
 `lib/puppet/type/svckill.rb`).
