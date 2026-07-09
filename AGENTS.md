@@ -78,48 +78,46 @@ the ignore-file path and is referenced by both `init.pp` and `ignore.pp`.
 
 - `:name` is fixed to the literal string `'svckill'` — declaring a second one is
   an error (`type/svckill.rb`); it is a singleton per node scope.
-- `:ignore` — array of service names/regexes to never kill (`:27-31`).
+- `:ignore` — array of service names/regexes to never kill.
 - `:ignorefiles` — files of ignore entries; defaults to
-  `/usr/local/etc/svckill.ignore` (`:33-40`).
-- `:verbose` (boolean, default `:true`) — full per-service output vs. counts
-  (`:42-49`).
-- `:mode` — the **only property** (`newproperty`, `:51-117`); values
-  `enforcing` / `warning`, default `warning` (`:62-68`). Its
+  `/usr/local/etc/svckill.ignore`.
+- `:verbose` (boolean, default `:true`) — full per-service output vs. counts.
+- `:mode` — the **only property** (`newproperty`); values
+  `enforcing` / `warning`, default `warning`. Its
   `change_to_s` renders the human-readable stop/disable report from
-  `provider.results` (`:74-116`), and `insync?` delegates to the provider
-  (`:70-72`).
+  `provider.results`, and `insync?` delegates to the provider.
 - **Autorequires** the `ignorefiles` path as both a `file` and a `simpcat_build`
-  resource (`:119-125`) so the ignore file is built before reaping runs.
+  resource so the ignore file is built before reaping runs.
 
 ### `kill` provider (`lib/puppet/provider/svckill/kill.rb`)
 
 The actual reaper.
 
-- **`initialize`** (`:6-44`) builds a systemd alias lookup table via
+- **`initialize`** builds a systemd alias lookup table via
   `systemctl list-unit-files` + `systemctl show -p Names`, skipping `static`
   and templated (`@`) units, so that a service reached via an *alias* in the
-  catalog is not killed under its canonical name (`:9-43`).
-- **`mode` (getter, `:46-168`)** does the work of deciding what to kill:
-  1. Collects every `service` resource name from the catalog (`:47-49`) — these
+  catalog is not killed under its canonical name.
+- **`mode` (getter)** does the work of deciding what to kill:
+  1. Collects every `service` resource name from the catalog — these
      are the "declared / keep" set.
   2. Merges `@resource[:ignore]` and every readable `:ignorefiles` line
-     (stripping `#` comments) into one `ignore` list (`:52-76`).
+     (stripping `#` comments) into one `ignore` list.
   3. Iterates `Puppet::Type.type('service').instances` (all services on the
      box) and **skips** anything that is: an RPM leftover
-     (`.rpmsave`/`.rpmnew`, RedHat only, `:86-92`); matched by an ignore entry
-     (treated as an anchored regex `^entry$`, `:96-99`); present in the catalog
-     by either name form (`:103-106`); or reachable via a catalog-declared
-     systemd alias (`:110-121`).
+     (`.rpmsave`/`.rpmnew`, RedHat only); matched by an ignore entry
+     (treated as an anchored regex `^entry$`); present in the catalog
+     by either name form; or reachable via a catalog-declared
+     systemd alias.
   4. Whatever survives and is *running* or *enabled* is added to
-     `@running_services` (`:129-166`), with special handling per provider
+     `@running_services`, with special handling per provider
      (`upstart` vs `redhat`/`systemd`); systemd services are only targeted when
-     their cached enabled state is exactly `enabled` or `disabled` (`:145-153`)
+     their cached enabled state is exactly `enabled` or `disabled`
      — killing units in other states can cause system errors.
-- **`insync?` (`:170-182`)** — in `noop` OR `warning` mode it logs a
+- **`insync?`** — in `noop` OR `warning` mode it logs a
   `Puppet.warning` listing what it *would* have killed and returns `true`
   (never changes anything). In `enforcing` mode it is in sync only when nothing
   is left to kill.
-- **`mode=` (setter, `:184-230`)** — the enforcing action: for each survivor,
+- **`mode=` (setter)** — the enforcing action: for each survivor,
   `stop` it if running and `disable` it if enabled, recording pass/fail into
   `@results` (which feeds the type's `change_to_s` report).
 
@@ -153,8 +151,7 @@ The actual reaper.
   OS-family and OS files *add to* rather than replace the common list. Override
   via Hiera, using the `--` knockout prefix to subtract an entry
   (`init.pp`).
-- **systemd aliases and RPM leftovers are deliberately spared** (`kill.rb`,
-  `:108-121`) — behavior that is easy to regress if the skip logic is edited.
+- **systemd aliases and RPM leftovers are deliberately spared** (`kill.rb`) — behavior that is easy to regress if the skip logic is edited.
 - **Acceptance tests exist on disk but are NOT run in CI** (see CI subsection).
 
 ## Dependencies
