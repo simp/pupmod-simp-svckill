@@ -8,16 +8,16 @@ This file provides guidance to AI agents when working with code in this reposito
 that **"no unnecessary services should be running on the system."** It is a
 service *reaper*: it enumerates every service the system knows about and stops +
 disables any that are **not** declared in the Puppet catalog and **not** on an
-explicit ignore list (`manifests/init.pp:1-7`,
-`lib/puppet/type/svckill.rb:2-10`).
+explicit ignore list (`manifests/init.pp`,
+`lib/puppet/type/svckill.rb`).
 
 The reaping is done by a **custom native type + provider** (`svckill`), not by
 Puppet manifest logic — the manifests only assemble the ignore list and declare
 a single `svckill { 'svckill': }` resource. The heart of this module is
 therefore in `lib/`, not `manifests/`.
 
-The module ships **`warning` mode by default** (`init.pp:60`,
-`lib/puppet/type/svckill.rb:62`): out of the box it only *reports* which
+The module ships **`warning` mode by default** (`init.pp`,
+`lib/puppet/type/svckill.rb`): out of the box it only *reports* which
 services it *would* stop/disable, and makes no changes. You must explicitly set
 `svckill::mode: enforcing` for it to actually kill anything — a deliberate
 safety default, since mis-configured, this type can shut down critical services.
@@ -27,12 +27,12 @@ safety default, since mis-configured, this type can shut down critical services.
 Three manifests (`init`, `ignore`, `ignore::collector`) plus one native
 type/provider pair. There are **no** `assert_private()` calls anywhere.
 
-### `svckill` — public entry class (`manifests/init.pp:55-77`)
+### `svckill` — public entry class (`manifests/init.pp`)
 
-Parameters (`init.pp:56-62`):
+Parameters (`init.pp`):
 
 - `$enable` (`Boolean`, default `true`) — master switch. When `false`, the class
-  declares nothing at all (`init.pp:63`).
+  declares nothing at all (`init.pp`).
 - `$ignore` (`Array[String]`, default `[]`) — services to never kill; may
   contain knockout entries (`--name`) to remove a service from the defaults.
 - `$ignore_defaults` (`Array[String]`, default `[]` in the manifest) — the
@@ -43,41 +43,41 @@ Parameters (`init.pp:56-62`):
 - `$mode` (`Enum['enforcing','warning']`, default `'warning'`).
 - `$verbose` (`Boolean`, default `true`).
 
-When `$enable` (`init.pp:63-76`):
+When `$enable` (`init.pp`):
 
 - `include '::svckill::ignore::collector'` — builds the managed ignore file.
-- `$combined_ignore_list = $ignore + $ignore_defaults` (`init.pp:66`), then
-  passed through **`simplib::knockout(...)`** (`init.pp:70`) which resolves the
+- `$combined_ignore_list = $ignore + $ignore_defaults` (`init.pp`), then
+  passed through **`simplib::knockout(...)`** (`init.pp`) which resolves the
   `--` knockout prefixes so a consumer can subtract a service (e.g. `--sshd`)
   from the defaults.
 - `$flattened_ignore_files` = the caller's `$ignore_files` plus the
-  collector's managed `default_ignore_file` (`init.pp:67`).
+  collector's managed `default_ignore_file` (`init.pp`).
 - Declares the one `svckill { 'svckill': }` resource, wiring `ignore`,
   `ignorefiles`, `verbose`, and `mode`, and `require`-ing the collector class
-  (`init.pp:69-75`).
+  (`init.pp`).
 
-### `svckill::ignore` — define (`manifests/ignore.pp:8-15`)
+### `svckill::ignore` — define (`manifests/ignore.pp`)
 
 `svckill::ignore { 'sshd': }` marks a single service as never-kill. It
 `include`s the collector and uses `ensure_resource('concat::fragment', ...)` to
 append `$name` as a fragment to the collector's `concat` file
-(`ignore.pp:11-14`). This is the **collection mechanism**: any number of
+(`ignore.pp`). This is the **collection mechanism**: any number of
 `svckill::ignore` declarations, anywhere in the catalog, aggregate their names
 into one on-disk ignore file via `concat` fragments — the provider then reads
 that file at runtime.
 
-### `svckill::ignore::collector` — class (`manifests/ignore/collector.pp:8-18`)
+### `svckill::ignore::collector` — class (`manifests/ignore/collector.pp`)
 
 Owns the `concat { $default_ignore_file: }` container
 (`/usr/local/etc/svckill.ignore`, `mode 0600`, `ensure_newline => true`,
 `warn => true`) that the `svckill::ignore` fragments target
-(`collector.pp:9-17`). `$default_ignore_file` is the single source of truth for
+(`collector.pp`). `$default_ignore_file` is the single source of truth for
 the ignore-file path and is referenced by both `init.pp` and `ignore.pp`.
 
 ### `svckill` native type (`lib/puppet/type/svckill.rb`)
 
 - `:name` is fixed to the literal string `'svckill'` — declaring a second one is
-  an error (`type/svckill.rb:12-25`); it is a singleton per node scope.
+  an error (`type/svckill.rb`); it is a singleton per node scope.
 - `:ignore` — array of service names/regexes to never kill (`:27-31`).
 - `:ignorefiles` — files of ignore entries; defaults to
   `/usr/local/etc/svckill.ignore` (`:33-40`).
@@ -127,61 +127,61 @@ The actual reaper.
 
 - **`warning` is the default mode — svckill kills nothing until you set
   `enforcing`.** In `warning` (or `--noop`), `insync?` always returns `true`
-  after logging what it *would* do (`kill.rb:171-179`). Do not assume applying
+  after logging what it *would* do (`kill.rb`). Do not assume applying
   this module reaps services; it doesn't unless `svckill::mode: enforcing`.
 - **This module has NO `simp_options` seam.** Unlike most SIMP modules, it makes
   **no** `simplib::lookup('simp_options::*', ...)` calls — it consumes nothing
   from `simp_options`. The only `simplib` function it uses in a manifest is
-  `simplib::knockout` (`init.pp:70`). This is a genuine special case; don't add
+  `simplib::knockout` (`init.pp`). This is a genuine special case; don't add
   a `simp_options` lookup expecting parity with other modules.
 - **Ignore entries are anchored regexes, not literals.** The provider matches
-  each ignore entry as `Regexp.new("^#{x}$")` (`kill.rb:96`). The default data
+  each ignore entry as `Regexp.new("^#{x}$")` (`kill.rb`). The default data
   relies on this (e.g. `^pe-.*`, `^rhsm*`, `^autovt@.*`). A bare name like
   `sshd` still works because it anchors to the whole service name.
 - **The ignore file is regex-capable and comment-aware.** Lines beginning with
-  `#` in an `ignorefiles` file are dropped (`kill.rb:64`); other lines are
+  `#` in an `ignorefiles` file are dropped (`kill.rb`); other lines are
   matched as regexes too.
 - **`svckill::ignore` requires the concat plumbing.** It writes `concat`
   fragments into the collector's file; that is the only supported way to add a
   single ignore entry declaratively. The type's `simpcat_build` autorequire
-  (`type/svckill.rb:123-125`) sequences the build before the reap.
+  (`type/svckill.rb`) sequences the build before the reap.
 - **The type is a hard singleton.** `:name` must equal `'svckill'`
-  (`type/svckill.rb:22-24`); you cannot declare two `svckill` resources.
+  (`type/svckill.rb`); you cannot declare two `svckill` resources.
 - **`ignore_defaults` comes from Hiera, not the manifest.** The manifest default
-  is `[]` (`init.pp:58`); the real defaults live in `data/*.yaml` under
-  `svckill::ignore_defaults` with `merge: unique` (`data/common.yaml:12-14`), so
+  is `[]` (`init.pp`); the real defaults live in `data/*.yaml` under
+  `svckill::ignore_defaults` with `merge: unique` (`data/common.yaml`), so
   OS-family and OS files *add to* rather than replace the common list. Override
   via Hiera, using the `--` knockout prefix to subtract an entry
-  (`init.pp:12-18`).
-- **systemd aliases and RPM leftovers are deliberately spared** (`kill.rb:88-92`,
+  (`init.pp`).
+- **systemd aliases and RPM leftovers are deliberately spared** (`kill.rb`,
   `:108-121`) — behavior that is easy to regress if the skip logic is edited.
 - **Acceptance tests exist on disk but are NOT run in CI** (see CI subsection).
 
 ## Dependencies
 
-Module dependencies (from `metadata.json:14-27`):
+Module dependencies (from `metadata.json`):
 
 - `puppetlabs/concat` `>= 6.4.0 < 10.0.0` — provides the `concat` /
   `concat::fragment` (and the `simpcat_build` autorequire target) used to build
   the ignore file.
 - `puppetlabs/stdlib` `>= 8.0.0 < 10.0.0`.
 - `simp/simplib` `>= 4.9.0 < 5.0.0` — provides `simplib::knockout`
-  (`init.pp:70`).
+  (`init.pp`).
 
 There are **no optional dependencies** (no `simp.optional_dependencies` in
 `metadata.json`) and **no `simplib::assert_optional_dependency` calls** in the
 code.
 
-Fixture-only repositories (from `.fixtures.yml:3-6`, checked out for test
+Fixture-only repositories (from `.fixtures.yml`, checked out for test
 compilation, not runtime deps): `concat`, `simplib`, `stdlib` (all from the
 `simp/` GitHub mirrors).
 
-Runtime requirement (from `metadata.json:68-73`): `puppet >= 7.0.0 < 9.0.0`.
+Runtime requirement (from `metadata.json`): `puppet >= 7.0.0 < 9.0.0`.
 This is the **older Puppet 7/8 baseline** — this module has **not** yet been
 migrated to OpenVox. When `metadata.json` switches this to `openvox`, update
 this line to match.
 
-Supported OS matrix (from `metadata.json:28-67`): CentOS 7/8/9; RedHat 7/8/9;
+Supported OS matrix (from `metadata.json`): CentOS 7/8/9; RedHat 7/8/9;
 OracleLinux 7/8/9; Rocky 8/9; AlmaLinux 8/9.
 
 ## Repository layout
@@ -202,7 +202,7 @@ OracleLinux 7/8/9; Rocky 8/9; AlmaLinux 8/9.
   `data/osfamily/RedHat/RedHat-{7,8,9}.yaml`, `data/virtual/{kvm,vmware}.yaml` —
   additive OS/family/virtual overrides to `svckill::ignore_defaults`.
 - `hiera.yaml` — v5 hierarchy: OS-family+release → OS-family → OS → virtual →
-  common (`hiera.yaml:6-16`).
+  common (`hiera.yaml`).
 - `metadata.json` — deps, OS matrix, Puppet requirement.
 - `spec/classes/init_spec.rb`, `spec/defines/ignore_spec.rb` — rspec-puppet unit
   tests.
@@ -216,7 +216,7 @@ OracleLinux 7/8/9; Rocky 8/9; AlmaLinux 8/9.
 ### CI (`.github/workflows/pr_tests.yml`)
 
 Triggered on pull requests. Uses an **older workflow style** with a global
-`env: PUPPET_VERSION: '~> 7'` (`pr_tests.yml:29-30`) and Ruby 2.7.8 for the
+`env: PUPPET_VERSION: '~> 7'` (`pr_tests.yml`) and Ruby 2.7.8 for the
 lint/check jobs. Six jobs, **no acceptance job**:
 
 1. `puppet-syntax` — `rake syntax`.
@@ -226,7 +226,7 @@ lint/check jobs. Six jobs, **no acceptance job**:
 5. `releng-checks` — `pkg:check_version`, `pkg:compare_latest_tag`,
    `pkg:create_tag_changelog`, and `pdk build --force`.
 6. `spec-tests` — `rake spec` across a Puppet 7.x (Ruby 2.7) and Puppet 8.x
-   (Ruby 3.2) matrix (`pr_tests.yml:104-131`).
+   (Ruby 3.2) matrix (`pr_tests.yml`).
 
 **GOTCHA: CI does not run the acceptance suites.** The beaker suites and
 nodesets under `spec/acceptance/` exist on disk but are **not** referenced by
@@ -264,13 +264,13 @@ puppet strings generate --format markdown --out REFERENCE.md
 bundle exec rake beaker:suites[default]
 ```
 
-Relevant gem pins: `rubocop ~> 1.88.0` (`Gemfile:16`),
-`puppetlabs_spec_helper ~> 8.0.0` (`Gemfile:30`),
-`simp-rake-helpers ~> 5.24.0` (`Gemfile:36`),
-`simp-beaker-helpers ~> 2.0.0` (`Gemfile:52`). The test Puppet range defaults to
-`>= 7 < 9` (`Gemfile:23`); the Puppet gem is pulled in only via
-`gem 'puppet', puppet_version` (`Gemfile:29`). `spec/spec_helper.rb` requires
-`puppetlabs_spec_helper/module_spec_helper` (`spec_helper.rb:11`).
+Relevant gem pins: `rubocop ~> 1.88.0` (`Gemfile`),
+`puppetlabs_spec_helper ~> 8.0.0` (`Gemfile`),
+`simp-rake-helpers ~> 5.24.0` (`Gemfile`),
+`simp-beaker-helpers ~> 2.0.0` (`Gemfile`). The test Puppet range defaults to
+`>= 7 < 9` (`Gemfile`); the Puppet gem is pulled in only via
+`gem 'puppet', puppet_version` (`Gemfile`). `spec/spec_helper.rb` requires
+`puppetlabs_spec_helper/module_spec_helper` (`spec_helper.rb`).
 
 ## Conventions
 
