@@ -7,7 +7,7 @@
 #
 class svckill::ignore::collector (
   Stdlib::Absolutepath $default_ignore_file = '/usr/local/etc/svckill.ignore'
-){
+) {
   concat { $default_ignore_file:
     owner          => 'root',
     group          => 'root',
