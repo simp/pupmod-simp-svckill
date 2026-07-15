@@ -9,6 +9,18 @@ describe 'Kill Unmanaged Services' do
 
 svckill::mode: 'enforcing'
 EOM
+    # On a fresh node the Sicura console previews this module with
+    # `puppet apply --noop`, which must not error. Exercise that here before
+    # the enforcing applies below. No package-removal step: svckill installs
+    # no package (it reaps unmanaged services), so noop-only is the
+    # representative check. A bare `include 'svckill'` (default mode 'warning')
+    # is what the console previews for the module class.
+    context 'in noop mode from a clean state' do
+      it 'applies without errors in noop mode' do
+        apply_manifest_on(host, 'include "svckill"', catch_failures: true, noop: true)
+      end
+    end
+
     context 'with mode=enforcing' do
       set_hieradata_on(host, hieradata, 'default')
 
