@@ -28,10 +28,6 @@ svckill::ignore_defaults:
 # mcstrans service used by selinux when mctrans is installed.
   - mcstrans
 #
-# Part of the ntpd service.  Although not installed by default on
-# el8 and later, ntp can still be used and is not covered in ntpd module.
-  - ntpdate
-#
 # This is just annoying. Doesn't do anything bad (or good)
 # just annoying.
   - netcf-transaction
