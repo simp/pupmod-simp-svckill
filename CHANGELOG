@@ -1,5 +1,9 @@
 * Thu Jul 30 2026 Hazel Caballero <hazel@sicura.us> - 5.1.0
-  - Removed out of date ntpd references
+- (#131) Removed the stale `ntpdate` entry from the RedHat family
+  `svckill::ignore_defaults` (the ntp suite was dropped from the distribution
+  in EL8 and `pupmod-simp-ntpd` has been archived). Sites running ntp from
+  third-party repositories should add `ntpdate` to `svckill::ignore`
+
 * Thu Jul 09 2026 Steven Pritchard <steve@sicura.us> - 5.0.1
 - Resolved puppet-lint manifest whitespace offenses
 
