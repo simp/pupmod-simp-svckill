@@ -12,7 +12,7 @@ describe 'svckill' do
         let(:kvm_virtual_list) { [ 'ovirt-guest-agent', 'qemu-guest-agent'] }
         let(:vmware_virtual_list) { [ 'vmtoolsd'] }
         let(:redhat_family_list) do
-          [ 'dbus.*', 'getty.*', 'irqbalance', 'gpm', 'messagebus', 'libvirt-guests', 'blk-availability', 'lvm2-lvmetad', 'lvm2-lvmpolld', 'lvm2-monitor', 'mdmonitor', 'mcstrans', 'ntpdate',
+          [ 'dbus.*', 'getty.*', 'irqbalance', 'gpm', 'messagebus', 'libvirt-guests', 'blk-availability', 'lvm2-lvmetad', 'lvm2-lvmpolld', 'lvm2-monitor', 'mdmonitor', 'mcstrans',
             'netcf-transaction', 'netlabel', 'portreserve', 'restorecond', 'sysstat', 'prefdm', 'krb524', 'mdmpd', 'readahead_later', 'lm_sensors']
         end
         let(:redhat_os_list) { [ '^rhsm*'] }
