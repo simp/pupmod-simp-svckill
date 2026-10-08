@@ -220,4 +220,3 @@ Valid values: `true`, `false`
 If set, output all services that were affected by svckill.
 
 Default value: `true`
-
